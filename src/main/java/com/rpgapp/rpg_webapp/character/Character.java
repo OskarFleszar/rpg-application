@@ -1,5 +1,6 @@
 package com.rpgapp.rpg_webapp.character;
 
+import com.rpgapp.rpg_webapp.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
@@ -77,7 +78,11 @@ public class Character {
     // Notatki dodatkowe
     private String notes;
 
-    public Character(String name, String race, String currentProfession, String lastProfession, int age, String gender, String eyeColor, int weight, String hairColor, int height, String starSign, int siblings, String birthPlace, String specialSigns, String campaignName, String campaignYear, String dmName, int totalExp, int currentExp, int gold, int silver, int bronze, Attribute attributes, Skills skills, List<Weapons> weapons, List<Armor> armors, List<String> talents, List<String> equipment, String backstory, String notes) {
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Character(String name, String race, String currentProfession, String lastProfession, Integer age, String gender, String eyeColor, Integer weight, String hairColor, Integer height, String starSign, Integer siblings, String birthPlace, String specialSigns, String campaignName, String campaignYear, String dmName, Integer totalExp, Integer currentExp, Integer gold, Integer silver, Integer bronze, Attribute attributes, Skills skills, List<Weapons> weapons, List<Armor> armors, List<String> talents, List<String> equipment, String backstory, String notes, User user) {
         this.name = name;
         this.race = race;
         this.currentProfession = currentProfession;
@@ -108,5 +113,6 @@ public class Character {
         this.equipment = equipment;
         this.backstory = backstory;
         this.notes = notes;
+        this.user = user;
     }
 }
