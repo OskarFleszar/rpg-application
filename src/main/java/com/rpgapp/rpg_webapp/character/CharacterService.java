@@ -1,7 +1,12 @@
 package com.rpgapp.rpg_webapp.character;
 
+import com.rpgapp.rpg_webapp.user.User;
+import com.rpgapp.rpg_webapp.user.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +15,26 @@ import java.util.List;
 public class CharacterService {
 
     private final CharacterRepository characterRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CharacterService(CharacterRepository characterRepository) {
+    public CharacterService(CharacterRepository characterRepository, UserRepository userRepository) {
         this.characterRepository = characterRepository;
+        this.userRepository = userRepository;
+    }
+
+    public User getCurrentUser() {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof UserDetails) {
+
+            String email = ((UserDetails) principal).getUsername();
+            return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        }
+        else {
+            throw new IllegalStateException("User not authenticated");
+        }
+
     }
 
     public List<Character> getCharacters() {
@@ -21,7 +42,8 @@ public class CharacterService {
     }
 
     public void addNewCharacter(Character character) {
-
+        User user = getCurrentUser();
+        character.setUser(user);
         characterRepository.save(character);
     }
 
@@ -132,7 +154,6 @@ public class CharacterService {
             existingCharacter.setNotes(updatedCharacter.getNotes());
         }
 
-        // Zapisanie zmian
         characterRepository.save(existingCharacter);
     }
 

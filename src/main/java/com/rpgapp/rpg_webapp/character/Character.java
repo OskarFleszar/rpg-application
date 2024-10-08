@@ -1,5 +1,6 @@
 package com.rpgapp.rpg_webapp.character;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.rpgapp.rpg_webapp.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -78,6 +79,7 @@ public class Character {
     // Notatki dodatkowe
     private String notes;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

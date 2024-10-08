@@ -1,6 +1,8 @@
 package com.rpgapp.rpg_webapp.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rpgapp.rpg_webapp.character.Character;
+import com.rpgapp.rpg_webapp.rolls.Roll;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,8 +38,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Character> characters;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Roll> roll;
 
     public User(String nickname, String email, String password) {
         this.nickname = nickname;
