@@ -1,6 +1,7 @@
 package com.rpgapp.rpg_webapp.user;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.rpgapp.rpg_webapp.campaign.Campaign;
 import com.rpgapp.rpg_webapp.character.Character;
 import com.rpgapp.rpg_webapp.rolls.Roll;
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,6 +47,12 @@ public class User implements UserDetails {
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Roll> roll;
+
+    @ManyToMany(mappedBy = "players")
+    private Set<Campaign> campaigns;
+
+    @OneToMany(mappedBy = "gameMaster")
+    private Set<Campaign> masterCampaigns;
 
     public User(String nickname, String email, String password) {
         this.nickname = nickname;

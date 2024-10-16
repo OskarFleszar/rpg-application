@@ -37,8 +37,6 @@ public class RollService {
         };
     }
 
-
-
     public void rollTheDice(Roll roll) {
         int numberOfDice = roll.getNumberOfDice();
         int sides = getSides(roll.getRollType());

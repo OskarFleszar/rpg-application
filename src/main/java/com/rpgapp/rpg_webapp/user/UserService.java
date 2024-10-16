@@ -27,6 +27,10 @@ public class UserService {
         if (userOptional.isPresent()) {
             throw new IllegalStateException("email taken");
         }
+        Optional<User> userOptional2 = userRepository.findUserByNickname(user.getNickname());
+        if (userOptional2.isPresent()) {
+            throw new IllegalStateException("nickname taken");
+        }
         userRepository.save(user);
     }
 
