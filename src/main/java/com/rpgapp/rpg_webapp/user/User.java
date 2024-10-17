@@ -3,6 +3,7 @@ package com.rpgapp.rpg_webapp.user;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rpgapp.rpg_webapp.campaign.Campaign;
 import com.rpgapp.rpg_webapp.character.Character;
+import com.rpgapp.rpg_webapp.messages.Message;
 import com.rpgapp.rpg_webapp.rolls.Roll;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,9 +45,13 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Character> characters;
 
-    @JsonManagedReference
+    @JsonManagedReference("user_rolls")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Roll> roll;
+
+    @JsonManagedReference("message_user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> message;
 
     @ManyToMany(mappedBy = "players")
     private Set<Campaign> campaigns;

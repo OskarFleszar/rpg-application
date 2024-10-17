@@ -1,5 +1,8 @@
 package com.rpgapp.rpg_webapp.campaign;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.rpgapp.rpg_webapp.messages.Message;
+import com.rpgapp.rpg_webapp.rolls.Roll;
 import com.rpgapp.rpg_webapp.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,8 +35,8 @@ public class Campaign {
     private String campaignName;
 
     @ManyToOne
-    @JoinColumn(name = "game_master_id")  // Relacja do Game Mastera
-    private User gameMaster;  // Użytkownik pełniący rolę Game Mastera
+    @JoinColumn(name = "game_master_id")
+    private User gameMaster;
 
     @ManyToMany
     @JoinTable(
@@ -40,7 +44,15 @@ public class Campaign {
             joinColumns = @JoinColumn(name = "campaign_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> players;  // Użytkownicy biorący udział w kampanii
+    private Set<User> players;
+
+    @JsonManagedReference("campaign_rolls")
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Roll> roll;
+
+    @JsonManagedReference("message_campaign")
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> message;
 
     public Campaign(String campaignName, User gameMaster, Set<User> players) {
         this.campaignName = campaignName;

@@ -2,6 +2,7 @@ package com.rpgapp.rpg_webapp.rolls;
 
 import com.rpgapp.rpg_webapp.character.CharacterService;
 import com.rpgapp.rpg_webapp.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class RollService {
     private final RollRepository rollRepository;
     private final CharacterService characterService;
 
+    @Autowired
     public RollService(RollRepository rollRepository, CharacterService characterService) {
         this.rollRepository = rollRepository;
         this.characterService = characterService;

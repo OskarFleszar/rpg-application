@@ -1,6 +1,7 @@
 package com.rpgapp.rpg_webapp.rolls;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.rpgapp.rpg_webapp.campaign.Campaign;
 import com.rpgapp.rpg_webapp.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,17 +37,23 @@ public class Roll {
     private LocalDateTime rollTime;
 
 
-    @JsonBackReference
+    @JsonBackReference("user_rolls")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Roll(int rollResult, List<Integer> singleDiceResult, int numberOfDice, String rollType, LocalDateTime rollTime, int timesRolled, User user) {
+    @JsonBackReference("campaign_rolls")
+    @ManyToOne
+    @JoinColumn(name = "campaign_id")
+    private Campaign campaign;
+
+    public Roll(int rollResult, List<Integer> singleDiceResult, int numberOfDice, String rollType, LocalDateTime rollTime, User user, Campaign campaign) {
         this.rollResult = rollResult;
         this.singleDiceResult = singleDiceResult;
         this.numberOfDice = numberOfDice;
         this.rollType = rollType;
         this.rollTime = rollTime;
         this.user = user;
+        this.campaign = campaign;
     }
 }
