@@ -28,11 +28,10 @@ public class CampaignService {
         campaign.setGameMaster(user);
 
         if (campaign.getPlayers() == null) {
-            campaign.setPlayers(new HashSet<>());  // Upewnij się, że Set<User> nie jest null
+            campaign.setPlayers(new HashSet<>());
         }
 
-        campaign.getPlayers().add(user);  // Dodanie użytkownika jako gracza
-
+        campaign.getPlayers().add(user);
         campaignRepository.save(campaign);
     }
 
@@ -46,9 +45,18 @@ public class CampaignService {
         Campaign campaign = campaignRepository.findById(campaignId)
                 .orElseThrow(() -> new IllegalStateException("Campaign not found"));
 
-        campaign.getPlayers().add(user.get());
-
-        campaignRepository.save(campaign);
+        if(campaign.getGameMaster().equals(characterService.getCurrentUser())){
+            if (!campaign.getPlayers().contains(user.get())) {
+                campaign.getPlayers().add(user.get());
+                campaignRepository.save(campaign);
+            } else {
+                throw new IllegalStateException("User is already part of this campaign");
+            }
+        }
+        else{
+            throw new IllegalStateException("You dont have permision to do that");
+        }
     }
+
 
 }

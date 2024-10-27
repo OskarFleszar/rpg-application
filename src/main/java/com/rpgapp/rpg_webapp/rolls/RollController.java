@@ -27,6 +27,6 @@ public class RollController {
                 .orElseThrow(() -> new IllegalArgumentException("Campaign with Id: " + campaignId + " not found"));
 
         roll.setCampaign(campaign);
-        rollService.rollTheDice(roll);
+        rollService.rollTheDice(roll, campaignId);
     }
 }

@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -54,9 +55,11 @@ public class Campaign {
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> message;
 
-    public Campaign(String campaignName, User gameMaster, Set<User> players) {
+    public Campaign(String campaignName, User gameMaster, Set<User> players, List<Roll> roll, List<Message> message) {
         this.campaignName = campaignName;
         this.gameMaster = gameMaster;
         this.players = players;
+        this.roll = roll;
+        this.message = message;
     }
 }

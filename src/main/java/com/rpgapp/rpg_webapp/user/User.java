@@ -11,10 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -59,10 +56,16 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "gameMaster")
     private Set<Campaign> masterCampaigns;
 
-    public User(String nickname, String email, String password) {
+    public User(String nickname, String email, String password, Role role, List<Character> characters, List<Roll> roll, List<Message> message, Set<Campaign> campaigns, Set<Campaign> masterCampaigns) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
+        this.role = role;
+        this.characters = characters;
+        this.roll = roll;
+        this.message = message;
+        this.campaigns = campaigns;
+        this.masterCampaigns = masterCampaigns;
     }
 
     @Override

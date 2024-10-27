@@ -1,5 +1,8 @@
 package com.rpgapp.rpg_webapp.rolls;
 
+import com.rpgapp.rpg_webapp.campaign.Campaign;
+import com.rpgapp.rpg_webapp.campaign.CampaignRepository;
+import com.rpgapp.rpg_webapp.campaign.CampaignService;
 import com.rpgapp.rpg_webapp.character.CharacterService;
 import com.rpgapp.rpg_webapp.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +17,15 @@ public class RollService {
 
     private final RollRepository rollRepository;
     private final CharacterService characterService;
+    private final CampaignRepository campaignRepository;
 
     @Autowired
-    public RollService(RollRepository rollRepository, CharacterService characterService) {
+    public RollService(RollRepository rollRepository, CharacterService characterService, CampaignRepository campaignRepository) {
         this.rollRepository = rollRepository;
         this.characterService = characterService;
+        this.campaignRepository = campaignRepository;
     }
+
 
     public int diceRoll(int sides) {
         return (int) (Math.random() * sides) + 1;
@@ -39,22 +45,41 @@ public class RollService {
         };
     }
 
-    public void rollTheDice(Roll roll) {
+    public void rollTheDice(Roll roll, Long campaignId) {
         int numberOfDice = roll.getNumberOfDice();
         int sides = getSides(roll.getRollType());
         List<Integer> singleDiceRolls = new ArrayList<>();
         int result = 0;
-        for(int i = 0; i < numberOfDice; i++) {
+
+
+        for (int i = 0; i < numberOfDice; i++) {
             int singleResult = diceRoll(sides);
             singleDiceRolls.add(singleResult);
             result += singleResult;
         }
+
+
         roll.setSingleDiceResult(singleDiceRolls);
         roll.setRollResult(result);
-        User user = characterService.getCurrentUser();
-        roll.setUser(user);
         roll.setRollTime(LocalDateTime.now());
-        rollRepository.save(roll);
+
+
+        User user = characterService.getCurrentUser();
+
+
+        if (campaignRepository.existsByUserAndCampaign(user.getUserId(), campaignId)) {
+            roll.setUser(user);
+
+            Campaign campaign = campaignRepository.findById(campaignId)
+                    .orElseThrow(() -> new IllegalArgumentException("Campaign not found"));
+            roll.setCampaign(campaign);
+
+            rollRepository.save(roll);
+        } else {
+            throw new IllegalStateException("User is not part of this campaign");
+        }
     }
+
+
 
 }
