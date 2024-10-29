@@ -55,8 +55,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "gameMaster")
     private Set<Campaign> masterCampaigns;
+    
+    private byte[] profileImage;
 
-    public User(String nickname, String email, String password, Role role, List<Character> characters, List<Roll> roll, List<Message> message, Set<Campaign> campaigns, Set<Campaign> masterCampaigns) {
+    private String imageType;
+
+    public User(String nickname, String email, String password, Role role, List<Character> characters, List<Roll> roll, List<Message> message, Set<Campaign> campaigns, Set<Campaign> masterCampaigns, byte[] profileImage, String imageType) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
@@ -66,6 +70,8 @@ public class User implements UserDetails {
         this.message = message;
         this.campaigns = campaigns;
         this.masterCampaigns = masterCampaigns;
+        this.profileImage = profileImage;
+        this.imageType = imageType;
     }
 
     @Override

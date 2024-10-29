@@ -4,7 +4,9 @@ import com.rpgapp.rpg_webapp.character.CharacterService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +37,21 @@ public class UserService {
         }
         userRepository.save(user);
     }
+
+    @Transactional
+    public void saveProfileImage(MultipartFile file) throws IOException {
+        User user = characterService.getCurrentUser();
+
+        user.setImageType(file.getContentType());
+        user.setProfileImage(file.getBytes());
+        userRepository.save(user);
+    }
+
+    public byte[] getUserProfileImage() {
+        User user = characterService.getCurrentUser();
+        return user.getProfileImage();
+    }
+
 
     public void deleteUser(Long userId) {
         boolean exists = userRepository.existsById(userId);
