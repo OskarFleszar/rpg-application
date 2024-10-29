@@ -1,5 +1,6 @@
 package com.rpgapp.rpg_webapp.user;
 
+import com.rpgapp.rpg_webapp.character.CharacterService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final CharacterService characterService;
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CharacterService characterService) {
         this.userRepository = userRepository;
+        this.characterService = characterService;
     }
 
     public List<User> getUsers() {
@@ -44,10 +46,14 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(Long userId, User updatedUser) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("student with id: " + userId + " doesn't exist"));
+    public void updateUser(User updatedUser) {
+        User user = characterService.getCurrentUser();
 
         if (updatedUser.getNickname() != null && !updatedUser.getNickname().isEmpty() && !Objects.equals(user.getNickname(), updatedUser.getNickname())) {
+            Optional<User> userOptional = userRepository.findUserByNickname(updatedUser.getNickname());
+            if(userOptional.isPresent()){
+                throw new IllegalStateException("nickname taken");
+            }
             user.setNickname(updatedUser.getNickname());
         }
 
@@ -57,10 +63,6 @@ public class UserService {
                 throw new IllegalStateException("email taken");
             }
             user.setEmail(updatedUser.getEmail());
-        }
-
-        if(updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty() && !Objects.equals(user.getPassword(), updatedUser.getPassword())){
-            user.setPassword(updatedUser.getPassword());
         }
     }
 

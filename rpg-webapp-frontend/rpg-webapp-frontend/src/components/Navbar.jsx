@@ -48,7 +48,12 @@ function Navbar() {
       </div>
       <div className="navbar-right">
         {loggedIn ? (
+          <>
+          <Link to="/profile">
+            <button>Profile</button>
+          </Link>
           <button onClick={handleLogout}>Logout</button>
+          </>
         ) : (
           <>
             <Link to="/login">

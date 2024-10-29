@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
 import '../styles/RegisterLogin.sass';
-import Navbar from '../components/Navbar';
 
 function Login() {
   const [email, setEmail] = useState('');
