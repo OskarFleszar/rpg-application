@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CharacterService {
@@ -38,7 +39,11 @@ public class CharacterService {
     }
 
     public List<Character> getCharacters() {
-        return characterRepository.findAll();
+        User user = getCurrentUser();
+        return user.getCharacters();
+    }  
+    public Optional<Character> getOneCharacter(Long characterId) {
+       return characterRepository.findById(characterId);
     }
 
     public void addNewCharacter(Character character) {
@@ -138,8 +143,8 @@ public class CharacterService {
         if (updatedCharacter.getWeapons() != null) {
             existingCharacter.setWeapons(updatedCharacter.getWeapons());
         }
-        if (updatedCharacter.getArmors() != null) {
-            existingCharacter.setArmors(updatedCharacter.getArmors());
+        if (updatedCharacter.getArmor() != null) {
+            existingCharacter.setArmor(updatedCharacter.getArmor());
         }
         if (updatedCharacter.getTalents() != null) {
             existingCharacter.setTalents(updatedCharacter.getTalents());
@@ -158,6 +163,6 @@ public class CharacterService {
     }
 
 
-
+  
 }
 

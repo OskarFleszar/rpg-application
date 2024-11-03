@@ -63,15 +63,15 @@ public class Character {
     private List<Weapons> weapons;
 
     @ElementCollection
-    private List<Armor> armors;
+    private List<Armor> armor;
 
     // Zdolności
     @ElementCollection
-    private List<String> talents;
+    private List<Items> talents;
 
     // Ekwipunek
     @ElementCollection
-    private List<String> equipment;
+    private List<Items> equipment;
 
     // Historia i notatki
     private String backstory;
@@ -84,7 +84,7 @@ public class Character {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Character(String name, String race, String currentProfession, String lastProfession, Integer age, String gender, String eyeColor, Integer weight, String hairColor, Integer height, String starSign, Integer siblings, String birthPlace, String specialSigns, String campaignName, String campaignYear, String dmName, Integer totalExp, Integer currentExp, Integer gold, Integer silver, Integer bronze, Attribute attributes, Skills skills, List<Weapons> weapons, List<Armor> armors, List<String> talents, List<String> equipment, String backstory, String notes, User user) {
+    public Character(String name, String race, String currentProfession, String lastProfession, Integer age, String gender, String eyeColor, Integer weight, String hairColor, Integer height, String starSign, Integer siblings, String birthPlace, String specialSigns, String campaignName, String campaignYear, String dmName, Integer totalExp, Integer currentExp, Integer gold, Integer silver, Integer bronze, Attribute attributes, Skills skills, List<Weapons> weapons, List<Armor> armor, List<Items> talents, List<Items> equipment, String backstory, String notes, User user) {
         this.name = name;
         this.race = race;
         this.currentProfession = currentProfession;
@@ -110,7 +110,7 @@ public class Character {
         this.attributes = attributes;
         this.skills = skills;
         this.weapons = weapons;
-        this.armors = armors;
+        this.armor = armor;
         this.talents = talents;
         this.equipment = equipment;
         this.backstory = backstory;

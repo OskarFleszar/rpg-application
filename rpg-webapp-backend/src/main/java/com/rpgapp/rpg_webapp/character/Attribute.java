@@ -30,7 +30,7 @@ public class Attribute {
 
     // Domyślny konstruktor
     public Attribute() {
-        initializeAttributes(); // Inicjalizuj atrybuty
+        initializeAttributes();
     }
 
     // Metoda do inicjalizacji atrybutów z nazwami

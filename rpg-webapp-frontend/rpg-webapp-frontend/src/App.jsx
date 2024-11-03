@@ -4,6 +4,9 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Characters from './pages/Characters';
+import CharacterForm from './pages/CharacterForm';
+import CharacterCreator from './pages/CharacterCreator';
 
 
 function App() {
@@ -12,9 +15,12 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/Characters" element={<Characters />} />
+        <Route path="/Characters/:id" element={<CharacterForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />}/>
+        <Route path="/character-creator" element={<CharacterCreator />}/>
       </Routes>
     </Router>
   );

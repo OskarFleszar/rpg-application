@@ -45,6 +45,7 @@ function Navbar() {
       </div>
       <div className="navbar-center">
         <Link to="/">Home</Link>
+        {loggedIn ? (<Link to="/characters">Characters</Link>): null }
       </div>
       <div className="navbar-right">
         {loggedIn ? (

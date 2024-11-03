@@ -55,7 +55,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "gameMaster")
     private Set<Campaign> masterCampaigns;
-    
+
     private byte[] profileImage;
 
     private String imageType;
