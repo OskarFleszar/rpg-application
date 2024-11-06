@@ -1,13 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Profile from './pages/Profile';
-import Characters from './pages/Characters';
-import CharacterForm from './pages/CharacterForm';
-import CharacterCreator from './pages/CharacterCreator';
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Characters from "./pages/Characters";
+import CharacterForm from "./pages/CharacterForm";
 
 function App() {
   return (
@@ -19,8 +17,8 @@ function App() {
         <Route path="/Characters/:id" element={<CharacterForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />}/>
-        <Route path="/character-creator" element={<CharacterCreator />}/>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/character-creator" element={<CharacterForm />} />
       </Routes>
     </Router>
   );

@@ -1,61 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from "react";
 
-const CharacterSkills = ({ character, setCharacter }) => {
-  const [skills, setSkills] = useState([]);
-
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/character/default-skills', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        const initialSkills = Object.entries(response.data.skills).map(([skillName, skillInfo]) => ({
-          skillName,
-          skillLevel: skillInfo.level,
-          skillType: skillInfo.type,
-        }));
-        setSkills(initialSkills);
-      } catch (error) {
-        console.error("Błąd przy pobieraniu umiejętności:", error);
-      }
-    };
-
-    fetchSkills();
-  }, []);
-
-  const handleSkillChange = (skillName, level) => {
-    const updatedSkills = skills.map((skill) =>
-      skill.skillName === skillName ? { ...skill, skillLevel: level } : skill
-    );
-
-    setSkills(updatedSkills);
-    setCharacter((prevCharacter) => ({
-      ...prevCharacter,
-      skills: updatedSkills,
-    }));
-  };
+const CharacterSkills = ({ skills, setSkills }) => {
+  if (!skills || Object.keys(skills).length === 0) {
+    return <p>Ładowanie umiejętności...</p>;
+  }
 
   return (
     <div className="character-skills">
-      {skills.map((skill) => (
-        <div key={skill.skillName} className="skill-row">
-          <label>{skill.skillName}</label>
+      <h2>Umiejętności</h2>
+      {Object.entries(skills).map(([skillName, skillInfo]) => (
+        <div key={skillName} className="skill-row">
+          <label>{skillName}</label>
           <div className="skill-options">
-            {['NOT_PURCHASED', 'PURCHASED', 'PLUS_10', 'PLUS_20'].map((level) => (
-              <label key={level}>
-                <input
-                  type="radio"
-                  name={skill.skillName}
-                  value={level}
-                  checked={skill.skillLevel === level}
-                  onChange={() => handleSkillChange(skill.skillName, level)}
-                />
-                {level.replace('_', ' ')}
-              </label>
-            ))}
+            {["NOT_PURCHASED", "PURCHASED", "PLUS_10", "PLUS_20"].map(
+              (level) => {
+                const isChecked = skillInfo.level === level;
+
+                return (
+                  <label key={level}>
+                    <input
+                      type="radio"
+                      name={skillName}
+                      value={level}
+                      checked={isChecked}
+                      onChange={() => {
+                        setSkills((prevSkills) => ({
+                          ...prevSkills,
+                          [skillName]: {
+                            ...prevSkills[skillName],
+                            level: level,
+                          },
+                        }));
+                      }}
+                    />
+                    {level.replace("_", " ")}
+                  </label>
+                );
+              }
+            )}
           </div>
         </div>
       ))}

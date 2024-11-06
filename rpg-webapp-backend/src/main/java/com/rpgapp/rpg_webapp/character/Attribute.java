@@ -14,7 +14,7 @@ import java.util.Map;
 public class Attribute {
 
     @AllArgsConstructor
-    @NoArgsConstructor // Dodanie domyślnego konstruktora
+    @NoArgsConstructor
     @Data
     @Embeddable
     public static class Attributes {

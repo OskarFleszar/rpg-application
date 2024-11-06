@@ -1,73 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from "react";
 
-const CharacterAttributes = ({ character, setCharacter }) => {
-  const [attributes, setAttributes] = useState([]);
+const CharacterAttributes = ({ attributes, setAttributes }) => {
+  // Sprawdzenie, czy `attributes` zawiera dane
+  if (!attributes || Object.keys(attributes).length === 0) {
+    return <p>Ładowanie atrybutów...</p>;
+  }
 
-  useEffect(() => {
-    const fetchAttributes = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/character/default-attributes', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        const initialAttributes = Object.entries(response.data.attributes).map(([key, value]) => ({
-          name: key,
-          baseValue: value.baseValue || 0,
-          advancementPoints: value.advancementPoints || 0,
-          currentValue: value.currentValue || 0,
-        }));
-        setAttributes(initialAttributes);
-      } catch (error) {
-        console.error("Błąd przy pobieraniu domyślnych atrybutów:", error);
-      }
-    };
-
-    fetchAttributes();
-  }, []);
-
-  const handleAttributeChange = (index, field, value) => {
-    const updatedAttributes = attributes.map((attr, i) =>
-      i === index
-        ? {
-            ...attr,
-            [field]: parseInt(value) || 0
-          }
-        : attr
-    );
-
-    setAttributes(updatedAttributes);
-    setCharacter((prevCharacter) => ({
-      ...prevCharacter,
-      attributes: updatedAttributes,
+  const handleAttributeChange = (name, field, value) => {
+    setAttributes((prevAttributes) => ({
+      ...prevAttributes,
+      [name]: {
+        ...prevAttributes[name],
+        [field]: parseInt(value) || 0,
+      },
     }));
   };
 
   return (
     <div className="character-attributes">
       <h2>Atrybuty</h2>
-      {attributes.map((attr, index) => (
-        <div key={attr.name} className="attribute-row">
-          <label>{attr.name}</label>
+      {/* Renderowanie atrybutów */}
+      {Object.entries(attributes).map(([key, attr]) => (
+        <div key={key} className="attribute-row">
+          <label>{key}</label>
           <div className="attribute-inputs">
             <input
               type="number"
               placeholder="Base"
-              value={attr.baseValue}
-              onChange={(e) => handleAttributeChange(index, 'baseValue', e.target.value)}
+              value={attr.baseValue || 0}
+              onChange={(e) =>
+                handleAttributeChange(key, "baseValue", e.target.value)
+              }
             />
             <input
               type="number"
               placeholder="Advancement"
-              value={attr.advancementPoints}
-              onChange={(e) => handleAttributeChange(index, 'advancementPoints', e.target.value)}
+              value={attr.advancementPoints || 0}
+              onChange={(e) =>
+                handleAttributeChange(key, "advancementPoints", e.target.value)
+              }
             />
             <input
               type="number"
               placeholder="Current"
-              value={attr.currentValue}
-              onChange={(e) => handleAttributeChange(index, 'currentValue', e.target.value)}
+              value={attr.currentValue || 0}
+              onChange={(e) =>
+                handleAttributeChange(key, "currentValue", e.target.value)
+              }
             />
           </div>
         </div>
