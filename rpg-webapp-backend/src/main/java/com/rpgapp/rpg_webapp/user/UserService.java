@@ -47,11 +47,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public byte[] getUserProfileImage() {
-        User user = characterService.getCurrentUser();
-        return user.getProfileImage();
-    }
-
 
     public void deleteUser(Long userId) {
         boolean exists = userRepository.existsById(userId);

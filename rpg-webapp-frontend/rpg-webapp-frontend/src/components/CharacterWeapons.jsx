@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const CharacterWeapons = ({ weapons = [], setWeapons }) => {
   const [newWeapon, setNewWeapon] = useState({
-    name: '',
-    category: '',
-    strength: '',
-    range: '',
-    weaponAttributes: '',
+    name: "",
+    category: "",
+    strength: "",
+    range: "",
+    weaponAttributes: "",
   });
 
-  // Funkcja do obsługi zmian w polach nowej broni
-  const handleWeaponChange = (e) => {
+  const handleNewWeaponChange = (e) => {
     const { name, value } = e.target;
     setNewWeapon((prevWeapon) => ({
       ...prevWeapon,
@@ -18,10 +17,28 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
     }));
   };
 
-  // Funkcja dodająca nową broń do listy
   const handleAddWeapon = () => {
     setWeapons((prevWeapons) => [...prevWeapons, newWeapon]);
-    setNewWeapon({ name: '', category: '', strength: '', range: '', weaponAttributes: '' });
+    setNewWeapon({
+      name: "",
+      category: "",
+      strength: "",
+      range: "",
+      weaponAttributes: "",
+    });
+  };
+
+  const handleWeaponChange = (index, e) => {
+    const { name, value } = e.target;
+    setWeapons((prevWeapons) =>
+      prevWeapons.map((weapon, i) =>
+        i === index ? { ...weapon, [name]: value } : weapon
+      )
+    );
+  };
+
+  const handleDeleteWeapon = (index) => {
+    setWeapons((prevWeapons) => prevWeapons.filter((_, i) => i !== index));
   };
 
   return (
@@ -30,7 +47,54 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
         <ul>
           {weapons.map((weapon, index) => (
             <li key={index}>
-              <strong>{weapon.name}</strong> - {weapon.category}, Siła: {weapon.strength}, Zasięg: {weapon.range}, Atrybuty: {weapon.weaponAttributes}
+              <div>
+                <label>Nazwa:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={weapon.name}
+                  onChange={(e) => handleWeaponChange(index, e)}
+                />
+              </div>
+              <div>
+                <label>Kategoria:</label>
+                <input
+                  type="text"
+                  name="category"
+                  value={weapon.category}
+                  onChange={(e) => handleWeaponChange(index, e)}
+                />
+              </div>
+              <div>
+                <label>Siła:</label>
+                <input
+                  type="text"
+                  name="strength"
+                  value={weapon.strength}
+                  onChange={(e) => handleWeaponChange(index, e)}
+                />
+              </div>
+              <div>
+                <label>Zasięg:</label>
+                <input
+                  type="number"
+                  name="range"
+                  value={weapon.range}
+                  onChange={(e) => handleWeaponChange(index, e)}
+                />
+              </div>
+              <div>
+                <label>Atrybuty:</label>
+                <input
+                  type="text"
+                  name="weaponAttributes"
+                  value={weapon.weaponAttributes}
+                  onChange={(e) => handleWeaponChange(index, e)}
+                />
+              </div>
+              <button type="button" onClick={() => handleDeleteWeapon(index)}>
+                Usuń
+              </button>
             </li>
           ))}
         </ul>
@@ -45,7 +109,7 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
           type="text"
           name="name"
           value={newWeapon.name}
-          onChange={handleWeaponChange}
+          onChange={handleNewWeaponChange}
         />
       </div>
 
@@ -55,7 +119,7 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
           type="text"
           name="category"
           value={newWeapon.category}
-          onChange={handleWeaponChange}
+          onChange={handleNewWeaponChange}
         />
       </div>
 
@@ -65,7 +129,7 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
           type="text"
           name="strength"
           value={newWeapon.strength}
-          onChange={handleWeaponChange}
+          onChange={handleNewWeaponChange}
         />
       </div>
 
@@ -75,7 +139,7 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
           type="number"
           name="range"
           value={newWeapon.range}
-          onChange={handleWeaponChange}
+          onChange={handleNewWeaponChange}
         />
       </div>
 
@@ -85,11 +149,13 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
           type="text"
           name="weaponAttributes"
           value={newWeapon.weaponAttributes}
-          onChange={handleWeaponChange}
+          onChange={handleNewWeaponChange}
         />
       </div>
 
-      <button type="button" onClick={handleAddWeapon}>Dodaj broń</button>
+      <button type="button" onClick={handleAddWeapon}>
+        Dodaj broń
+      </button>
     </div>
   );
 };

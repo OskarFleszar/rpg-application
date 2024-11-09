@@ -38,14 +38,14 @@ public class UserController {
         return ResponseEntity.ok().contentType(MediaType.valueOf(user.getImageType())).body(image);
     }
 
+    @PostMapping("/uploadProfileImage")
+    public void uploadProfileImage(MultipartFile file) throws IOException {userService.saveProfileImage(file);}
 
     @PostMapping
     public void registerNewUser(@RequestBody User user){
         userService.addNewUser(user);
     }
 
-    @PostMapping("/uploadProfileImage")
-    public void uploadProfileImage(MultipartFile file) throws IOException {userService.saveProfileImage(file);}
 
     @DeleteMapping(path = "{userId}")
     public void deleteUse(@PathVariable("userId") Long userId) {

@@ -48,6 +48,9 @@ const CharacterForm = () => {
   const [equipment, setEquipment] = useState([]);
   const [talents, setTalents] = useState([]);
   const [message, setMessage] = useState("");
+  const [imageUrl, setImageUrl] = useState(null);
+  const [image, setImage] = useState(null);
+  const [isEditingImage, setIsEditingImage] = useState(false);
 
   // Pobieranie danych postaci lub domyślnych wartości dla nowej postaci
   useEffect(() => {
@@ -104,16 +107,63 @@ const CharacterForm = () => {
     };
 
     fetchCharacterData();
+    fetchCharacterImage();
   }, [id, isEditMode]);
 
-  // Aktualizacja zmian w skillsach
-  useEffect(() => {
-    console.log("zaktualizowane skile:", skills);
-  }, [skills]);
+  const fetchCharacterImage = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/character/characterImage/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          responseType: "arraybuffer", // Pobieranie danych obrazu jako tablicy bajtów
+        }
+      );
+      // Konwersja danych obrazu na Base64
+      const base64Image = btoa(
+        new Uint8Array(response.data).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ""
+        )
+      );
+      setImageUrl(`data:image/jpeg;base64,${base64Image}`);
+    } catch (error) {
+      console.error("Błąd przy pobieraniu zdjęcia postaci:", error);
+    }
+  };
 
-  useEffect(() => {
-    console.log("zaktualizowane atrybuty:", attributes);
-  }, [attributes]);
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleEdit = () => {
+    setIsEditingImage(!isEditingImage);
+  };
+
+  const handleImageUpload = async () => {
+    if (!image) return;
+    const formData = new FormData();
+    formData.append("file", image);
+
+    try {
+      await axios.post(
+        `http://localhost:8080/api/character/uploadCharacterImage/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      alert("Zdjęcie profilowe zostało zaktualizowane");
+      fetchCharacterImage();
+    } catch (error) {
+      console.error("Błąd podczas przesyłania obrazu: ", error);
+    }
+  };
 
   // Obsługa usuwania postaci
   const handleDelete = async () => {
@@ -202,7 +252,32 @@ const CharacterForm = () => {
   };
 
   return (
-    <div className="character-creator">
+    <div className="character-details">
+      <div className="character-image">
+        {imageUrl ? (
+          isEditingImage ? (
+            <>
+              <img className="img" src={imageUrl} alt="Profile" />
+              <input type="file" onChange={handleImageChange} />
+              <button onClick={handleImageUpload}>Prześlij zdjęcie</button>
+            </>
+          ) : (
+            <img className="img" src={imageUrl} alt="Profile" />
+          )
+        ) : (
+          <>
+            <input type="file" onChange={handleImageChange} />
+            <button onClick={handleImageUpload}>Prześlij zdjęcie</button>
+          </>
+        )}
+      </div>
+      <div>
+        {isEditingImage ? (
+          <button onClick={handleEdit}>Edytuj</button>
+        ) : (
+          <button onClick={handleEdit}>Anuluj</button>
+        )}
+      </div>
       <h2>Edytuj Postać</h2>
       <form>
         <div>
@@ -386,6 +461,13 @@ const CharacterForm = () => {
         {/* Sekcja Zbroje */}
         <h3>Armor</h3>
         <CharacterArmor armor={armor} setArmor={setArmor} />
+
+        <h3>Ekwipunek</h3>
+        <CharacterItems items={equipment} setItems={setEquipment} />
+
+        <h3>Zdolności</h3>
+        <CharacterItems items={talents} setItems={setTalents} />
+
         <div>
           <label>Złote korony:</label>
           <input
@@ -413,11 +495,6 @@ const CharacterForm = () => {
             onChange={handleChange}
           />
         </div>
-        {/* Sekcja Ekwipunek */}
-        <CharacterItems items={equipment} setItems={setEquipment} />
-
-        {/* Sekcja Talenty */}
-        <CharacterItems items={talents} setItems={setTalents} />
         <div>
           <label>Historia:</label>
           <textarea

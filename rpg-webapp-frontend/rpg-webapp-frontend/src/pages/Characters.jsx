@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import CharacterCard from '../components/CharacterCard';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import CharacterCard from "../components/CharacterCard";
+import { Link } from "react-router-dom";
+import "../styles/Characters.sass";
 
 function Characters() {
   const [characters, setCharacters] = useState([]);
@@ -9,12 +10,23 @@ function Characters() {
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/character', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
+        const response = await axios.get(
+          "http://localhost:8080/api/character",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
-        });
-        setCharacters(response.data); // Zakładamy, że response.data to lista postaci
+        );
+
+        const charactersWithImages = await Promise.all(
+          response.data.map(async (character) => {
+            const imageUrl = await fetchCharacterImage(character.characterId);
+            return { ...character, imageUrl };
+          })
+        );
+
+        setCharacters(charactersWithImages);
       } catch (error) {
         console.error("Error fetching characters:", error);
       }
@@ -23,16 +35,46 @@ function Characters() {
     fetchCharacters();
   }, []);
 
+  const fetchCharacterImage = async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/character/characterImage/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          responseType: "arraybuffer", // Pobieranie danych obrazu jako tablicy bajtów
+        }
+      );
+
+      // Konwersja danych obrazu na Base64
+      const base64Image = btoa(
+        new Uint8Array(response.data).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          ""
+        )
+      );
+      return `data:image/jpeg;base64,${base64Image}`;
+    } catch (error) {
+      console.error("Błąd przy pobieraniu zdjęcia postaci:", error);
+      return null;
+    }
+  };
+
   return (
     <div className="characters-list">
       <h2>Twoje postacie</h2>
       <div className="characters-container">
         {characters.map((character) => (
-          <CharacterCard key={character.characterId} character={character} />
+          <CharacterCard
+            key={character.characterId}
+            character={character}
+            imageUrl={character.imageUrl} // Przekazujemy imageUrl dla każdej postaci
+          />
         ))}
       </div>
       <Link to="/character-creator">
-      <button>Create a new character</button>
+        <button>Create a new character</button>
       </Link>
     </div>
   );

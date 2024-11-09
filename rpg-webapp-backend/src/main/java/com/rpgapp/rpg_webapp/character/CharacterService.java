@@ -8,7 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,25 +27,21 @@ public class CharacterService {
     }
 
     public User getCurrentUser() {
-
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal instanceof UserDetails) {
-
             String email = ((UserDetails) principal).getUsername();
             return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        }
-        else {
+        } else {
             throw new IllegalStateException("User not authenticated");
         }
-
     }
 
     public List<Character> getCharacters() {
         User user = getCurrentUser();
         return user.getCharacters();
-    }  
+    }
     public Optional<Character> getOneCharacter(Long characterId) {
-       return characterRepository.findById(characterId);
+        return characterRepository.findById(characterId);
     }
 
     public void addNewCharacter(Character character) {
@@ -58,9 +56,18 @@ public class CharacterService {
             throw new IllegalStateException("character with id: " + characterId + " doesn't exist");
         }
         characterRepository.deleteById(characterId);
-
     }
 
+
+    @Transactional
+    public void saveCharacterImage(MultipartFile file, Long characterId) throws IOException {
+        Character character = characterRepository.findById(characterId)
+                .orElseThrow(() -> new IllegalStateException("Character with id: " + characterId + " doesn't exist"));
+
+        character.setImageType(file.getContentType());
+        character.setCharacterImage(file.getBytes());
+        characterRepository.save(character);
+    }
 
     @Transactional
     public void updateCharacter(Long characterId, Character updatedCharacter) {
@@ -163,6 +170,5 @@ public class CharacterService {
     }
 
 
-  
 }
 

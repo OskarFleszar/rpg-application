@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const CharacterItems = ({ items = [], setItems }) => {
   const [newItem, setNewItem] = useState({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
   });
 
-  // Funkcja do obsługi zmian w polach nowej broni
-  const handleItemChange = (e) => {
+  const handleNewItemChange = (e) => {
     const { name, value } = e.target;
     setNewItem((prevItem) => ({
       ...prevItem,
@@ -15,10 +14,22 @@ const CharacterItems = ({ items = [], setItems }) => {
     }));
   };
 
-  // Funkcja dodająca nową broń do listy
   const handleAddItem = () => {
     setItems((prevItems) => [...prevItems, newItem]);
-    setNewItem({ name: '', description: '' });
+    setNewItem({ name: "", description: "" });
+  };
+
+  const handleItemChange = (index, e) => {
+    const { name, value } = e.target;
+    setItems((prevItems) =>
+      prevItems.map((item, i) =>
+        i === index ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
+  const handleDeleteItem = (index) => {
+    setItems((prevItems) => prevItems.filter((_, i) => i !== index));
   };
 
   return (
@@ -27,12 +38,32 @@ const CharacterItems = ({ items = [], setItems }) => {
         <ul>
           {items.map((item, index) => (
             <li key={index}>
-              <strong>{item.name}</strong> : {item.description}
+              <div>
+                <label>Nazwa:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={item.name}
+                  onChange={(e) => handleItemChange(index, e)}
+                />
+              </div>
+              <div>
+                <label>Opis:</label>
+                <input
+                  type="text"
+                  name="description"
+                  value={item.description}
+                  onChange={(e) => handleItemChange(index, e)}
+                />
+              </div>
+              <button type="button" onClick={() => handleDeleteItem(index)}>
+                Usuń
+              </button>
             </li>
           ))}
         </ul>
       ) : (
-        <p>Brak </p>
+        <p>Brak</p>
       )}
 
       <div>
@@ -41,7 +72,7 @@ const CharacterItems = ({ items = [], setItems }) => {
           type="text"
           name="name"
           value={newItem.name}
-          onChange={handleItemChange}
+          onChange={handleNewItemChange}
         />
       </div>
 
@@ -51,13 +82,13 @@ const CharacterItems = ({ items = [], setItems }) => {
           type="text"
           name="description"
           value={newItem.description}
-          onChange={handleItemChange}
+          onChange={handleNewItemChange}
         />
       </div>
 
-     
-
-      <button type="button" onClick={handleAddItem}>Dodaj</button>
+      <button type="button" onClick={handleAddItem}>
+        Dodaj
+      </button>
     </div>
   );
 };

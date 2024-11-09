@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const CharacterArmor = ({ armor = [], setArmor }) => {
   const [newArmor, setNewArmor] = useState({
-    armorType: '',
-    location: '',
-    armorPoints: ''
+    armorType: "",
+    location: "",
+    armorPoints: "",
   });
 
-  
-  const handleArmorChange = (e) => {
+  const handleNewArmorChange = (e) => {
     const { name, value } = e.target;
     setNewArmor((prevArmor) => ({
       ...prevArmor,
@@ -16,19 +15,60 @@ const CharacterArmor = ({ armor = [], setArmor }) => {
     }));
   };
 
-  
   const handleAddArmor = () => {
     setArmor((prevArmor) => [...prevArmor, newArmor]);
-    setNewArmor({ armorType: '', location: '', armorPoints: '' });
+    setNewArmor({ armorType: "", location: "", armorPoints: "" });
+  };
+
+  const handleArmorChange = (index, e) => {
+    const { name, value } = e.target;
+    setArmor((prevArmor) =>
+      prevArmor.map((item, i) =>
+        i === index ? { ...item, [name]: value } : item
+      )
+    );
+  };
+
+  const handleDeleteArmor = (index) => {
+    setArmor((prevArmor) => prevArmor.filter((_, i) => i !== index));
   };
 
   return (
     <div className="character-armor">
       {armor.length > 0 ? (
         <ul>
-          {armor.map((armor, index) => (
+          {armor.map((armorItem, index) => (
             <li key={index}>
-              <strong>{armor.armorType}</strong> - {armor.location}, Punkty pancerza: {armor.armorPoints}
+              <div>
+                <label>Typ:</label>
+                <input
+                  type="text"
+                  name="armorType"
+                  value={armorItem.armorType}
+                  onChange={(e) => handleArmorChange(index, e)}
+                />
+              </div>
+              <div>
+                <label>Lokacja:</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={armorItem.location}
+                  onChange={(e) => handleArmorChange(index, e)}
+                />
+              </div>
+              <div>
+                <label>Punkty Zbroi:</label>
+                <input
+                  type="text"
+                  name="armorPoints"
+                  value={armorItem.armorPoints}
+                  onChange={(e) => handleArmorChange(index, e)}
+                />
+              </div>
+              <button type="button" onClick={() => handleDeleteArmor(index)}>
+                Usuń
+              </button>
             </li>
           ))}
         </ul>
@@ -43,7 +83,7 @@ const CharacterArmor = ({ armor = [], setArmor }) => {
           type="text"
           name="armorType"
           value={newArmor.armorType}
-          onChange={handleArmorChange}
+          onChange={handleNewArmorChange}
         />
       </div>
 
@@ -53,7 +93,7 @@ const CharacterArmor = ({ armor = [], setArmor }) => {
           type="text"
           name="location"
           value={newArmor.location}
-          onChange={handleArmorChange}
+          onChange={handleNewArmorChange}
         />
       </div>
 
@@ -63,11 +103,13 @@ const CharacterArmor = ({ armor = [], setArmor }) => {
           type="text"
           name="armorPoints"
           value={newArmor.armorPoints}
-          onChange={handleArmorChange}
+          onChange={handleNewArmorChange}
         />
       </div>
 
-      <button type="button" onClick={handleAddArmor}>Dodaj armor</button>
+      <button type="button" onClick={handleAddArmor}>
+        Dodaj armor
+      </button>
     </div>
   );
 };

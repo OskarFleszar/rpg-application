@@ -84,7 +84,11 @@ public class Character {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Character(String name, String race, String currentProfession, String lastProfession, Integer age, String gender, String eyeColor, Integer weight, String hairColor, Integer height, String starSign, Integer siblings, String birthPlace, String specialSigns, String campaignName, String campaignYear, String dmName, Integer totalExp, Integer currentExp, Integer gold, Integer silver, Integer bronze, Attribute attributes, Skills skills, List<Weapons> weapons, List<Armor> armor, List<Items> talents, List<Items> equipment, String backstory, String notes, User user) {
+    private byte[] characterImage;
+
+    private String imageType;
+
+    public Character(String name, String race, String currentProfession, String lastProfession, Integer age, String gender, String eyeColor, Integer weight, String hairColor, Integer height, String starSign, Integer siblings, String birthPlace, String specialSigns, String campaignName, String campaignYear, String dmName, Integer totalExp, Integer currentExp, Integer gold, Integer silver, Integer bronze, Attribute attributes, Skills skills, List<Weapons> weapons, List<Armor> armor, List<Items> talents, List<Items> equipment, String backstory, String notes, User user, byte[] characterImage, String imageType) {
         this.name = name;
         this.race = race;
         this.currentProfession = currentProfession;
@@ -116,5 +120,7 @@ public class Character {
         this.backstory = backstory;
         this.notes = notes;
         this.user = user;
+        this.characterImage = characterImage;
+        this.imageType = imageType;
     }
 }
