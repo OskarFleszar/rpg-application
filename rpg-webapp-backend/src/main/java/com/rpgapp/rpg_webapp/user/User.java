@@ -50,8 +50,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> message;
 
-    @ManyToMany(mappedBy = "players")
+    @ManyToMany(mappedBy = "players", fetch = FetchType.EAGER)
     private Set<Campaign> campaigns;
+
 
     @OneToMany(mappedBy = "gameMaster")
     private Set<Campaign> masterCampaigns;

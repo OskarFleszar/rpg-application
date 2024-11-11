@@ -1,29 +1,45 @@
-import { useState } from 'react';
-import axios from 'axios';
-import '../styles/RegisterLogin.sass';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "../styles/RegisterLogin.sass";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/authenticate', {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/authenticate",
+        {
+          email,
+          password,
+        }
+      );
       const { token } = response.data;
-      localStorage.setItem('token', token); 
-      console.log('Zalogowano pomyślnie:', token);
+      localStorage.setItem("token", token);
+      console.log("Zalogowano pomyślnie:", token);
+      fetchUserData();
 
-      
-      const loginEvent = new Event('login');
+      const loginEvent = new Event("login");
       window.dispatchEvent(loginEvent);
-      
     } catch (error) {
-      setError('Nieprawidłowy email lub hasło');
+      setError("Nieprawidłowy email lub hasło");
+    }
+  };
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/user/one", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      localStorage.setItem("userId", response.data.userId);
+    } catch (error) {
+      console.error("Błąd przy pobieraniu danych użytkownika:", error);
     }
   };
 
@@ -35,22 +51,22 @@ function Login() {
           <form onSubmit={handleLogin}>
             <div>
               <label>Email</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder="Email address"
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div>
               <label>Password</label>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 placeholder="Password"
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             {error && <p>{error}</p>}

@@ -3,6 +3,7 @@ package com.rpgapp.rpg_webapp.campaign;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/campaign")
@@ -12,6 +13,11 @@ public class CampaignController {
 
     public CampaignController(CampaignService campaignService) {
         this.campaignService = campaignService;
+    }
+
+    @GetMapping(path="/{campaignId}")
+    public Optional<Campaign> getCampaignData (@PathVariable("campaignId") Long campaignId) {
+        return campaignService.getCampaignData(campaignId);
     }
 
     @PostMapping("/create")
@@ -24,6 +30,8 @@ public class CampaignController {
         String nickname = payload.get("nickname");
         campaignService.addNewUserToCampaign(nickname, campaignId);
     }
+
+
 
 
 

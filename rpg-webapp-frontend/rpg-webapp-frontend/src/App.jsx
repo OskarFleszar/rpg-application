@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Characters from "./pages/Characters";
 import CharacterForm from "./pages/CharacterForm";
+import Campaigns from "./pages/Campaigns";
+import CampaignContent from "./pages/CampaignContent";
 
 function App() {
   return (
@@ -13,8 +15,10 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/Characters" element={<Characters />} />
-        <Route path="/Characters/:id" element={<CharacterForm />} />
+        <Route path="/characters" element={<Characters />} />
+        <Route path="/campaigns" element={<Campaigns />} />
+        <Route path="/campaigns/:id" element={<CampaignContent />} />
+        <Route path="/characters/:id" element={<CharacterForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />

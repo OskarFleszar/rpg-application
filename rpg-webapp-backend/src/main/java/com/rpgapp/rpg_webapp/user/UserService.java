@@ -1,5 +1,7 @@
 package com.rpgapp.rpg_webapp.user;
 
+import com.rpgapp.rpg_webapp.campaign.Campaign;
+import com.rpgapp.rpg_webapp.campaign.CampaignRepository;
 import com.rpgapp.rpg_webapp.character.CharacterService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +12,20 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final CharacterService characterService;
+    private final CampaignRepository campaignRepository;
     @Autowired
-    public UserService(UserRepository userRepository, CharacterService characterService) {
+
+    public UserService(UserRepository userRepository, CharacterService characterService, CampaignRepository campaignRepository) {
         this.userRepository = userRepository;
         this.characterService = characterService;
+        this.campaignRepository = campaignRepository;
     }
 
     public List<User> getUsers() {
@@ -76,6 +82,11 @@ public class UserService {
             }
             user.setEmail(updatedUser.getEmail());
         }
+    }
+
+
+    public Set<Campaign> getUserCampaigns(Long userId) {
+        return campaignRepository.findCampaignsByUserId(userId);
     }
 
 }

@@ -47,7 +47,6 @@ function Characters() {
         }
       );
 
-      // Konwersja danych obrazu na Base64
       const base64Image = btoa(
         new Uint8Array(response.data).reduce(
           (data, byte) => data + String.fromCharCode(byte),

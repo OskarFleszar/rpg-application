@@ -1,5 +1,6 @@
 package com.rpgapp.rpg_webapp.user;
 
+import com.rpgapp.rpg_webapp.campaign.Campaign;
 import com.rpgapp.rpg_webapp.character.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "api/user")
@@ -30,6 +32,14 @@ public class UserController {
 
     @GetMapping(path="/one")
     public User getOneUser() { return characterService.getCurrentUser();}
+
+    @GetMapping(path="/campaigns")
+    public Set<Campaign> getUserCampaigns(){
+        User user = characterService.getCurrentUser();
+
+        return userService.getUserCampaigns(user.getUserId());
+    }
+
 
     @GetMapping("/profileImage")
     public ResponseEntity<byte[]> getProfileImage() {

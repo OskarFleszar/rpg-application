@@ -59,4 +59,7 @@ public class CampaignService {
     }
 
 
+    public Optional<Campaign> getCampaignData(Long campaignId) {
+        return campaignRepository.findById(campaignId);
+    }
 }
