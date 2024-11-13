@@ -37,7 +37,11 @@ function Login() {
         },
       });
 
-      localStorage.setItem("userId", response.data.userId);
+      // Konwertujemy dane na JSON przed zapisaniem
+      localStorage.setItem("userData", JSON.stringify(response.data));
+      // Odczytujemy i konwertujemy JSON na obiekt
+      const loggedInUser = JSON.parse(localStorage.getItem("userData"));
+      console.log("zalogowany użytkownik: ", loggedInUser);
     } catch (error) {
       console.error("Błąd przy pobieraniu danych użytkownika:", error);
     }

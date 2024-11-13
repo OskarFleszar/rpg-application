@@ -1,6 +1,7 @@
 package com.rpgapp.rpg_webapp.messages;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rpgapp.rpg_webapp.campaign.Campaign;
 import com.rpgapp.rpg_webapp.user.User;
 import jakarta.persistence.*;
@@ -37,12 +38,17 @@ public class Message {
     private User user;
 
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd HH:mm")
     private LocalDateTime messageTime;
 
     @JsonBackReference("message_campaign")
     @ManyToOne
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
+
+    public String getNickname() {
+        return user != null ? user.getNickname() : "Nieznany użytkownik";
+    }
 
     public Message(User user, String content, LocalDateTime messageTime, Campaign campaign) {
         this.user = user;

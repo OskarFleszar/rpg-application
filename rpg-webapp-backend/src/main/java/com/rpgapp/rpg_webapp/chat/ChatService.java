@@ -32,12 +32,12 @@ public class ChatService {
         List<ChatEntry> chatEntries = new ArrayList<>();
 
         for(Message message : messages) {
-            chatEntries.add(new ChatEntry(message.getUser().getUserId(), message.getContent(), message.getMessageTime(), "message"));
+            chatEntries.add(new ChatEntry(message.getUser().getNickname(), message.getContent(), message.getMessageTime(), "message"));
         }
 
         for(Roll roll : rolls) {
             String rollContent = "Rolled " + roll.getNumberOfDice() + " " + roll.getRollType() + " Result: " + roll.getSingleDiceResult() + " = " + roll.getRollResult();
-            chatEntries.add(new ChatEntry(roll.getUser().getUserId(), rollContent, roll.getRollTime(), "roll"));
+            chatEntries.add(new ChatEntry(roll.getUser().getNickname(), rollContent, roll.getRollTime(), "roll"));
         }
 
         chatEntries.sort(Comparator.comparing(ChatEntry::getTimestamp));

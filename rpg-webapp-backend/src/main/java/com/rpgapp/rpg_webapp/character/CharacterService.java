@@ -4,6 +4,7 @@ import com.rpgapp.rpg_webapp.user.User;
 import com.rpgapp.rpg_webapp.user.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,6 +35,15 @@ public class CharacterService {
         } else {
             throw new IllegalStateException("User not authenticated");
         }
+    }
+
+    public User getCurrentUserWS(SimpMessageHeaderAccessor headerAccessor) {
+        // Najpierw sprawdzamy sesję WebSocket (jeśli headerAccessor jest dostępny)
+            UserDetails userDetails = (UserDetails) headerAccessor.getSessionAttributes().get("user");
+                String email = userDetails.getUsername();
+                return userRepository.findUserByEmail(email)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found in WebSocket session"));
+
     }
 
     public List<Character> getCharacters() {

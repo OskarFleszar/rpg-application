@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 public class ChatEntry {
 
-   private long userId;
+   private String nickname;
    private String content;
    private LocalDateTime timestamp;
    private String type;

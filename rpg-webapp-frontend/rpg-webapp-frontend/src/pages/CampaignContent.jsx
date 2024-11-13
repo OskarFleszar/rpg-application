@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Chat from "../components/Chat";
 
 const CampaignContent = () => {
   const { id } = useParams();
@@ -24,11 +25,10 @@ const CampaignContent = () => {
 
         setCampaignData(response.data);
 
-        const loggedInUserId = localStorage.getItem("userId");
-        console.log("zalogowany uzytkownik: ", loggedInUserId);
+        const loggedInUser = JSON.parse(localStorage.getItem("userData"));
+        console.log("zalogowany użytkownik: ", loggedInUser.userId);
 
-        // Sprawdź, czy zalogowany użytkownik jest gameMasterem
-        if (response.data.gameMaster.userId === parseInt(loggedInUserId)) {
+        if (response.data.gameMaster.userId === parseInt(loggedInUser.userId)) {
           setIsGameMaster(true);
         }
       } catch (error) {
@@ -78,6 +78,7 @@ const CampaignContent = () => {
             Dodaj nowego użytkownika
           </button>
         ))}
+      <Chat campaignId={id} />
     </div>
   );
 };
