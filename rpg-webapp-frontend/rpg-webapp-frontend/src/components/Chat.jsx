@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { over } from "stompjs";
 import SockJS from "sockjs-client/dist/sockjs";
 import axios from "axios";
+// import { parseISO, format } from "date-fns"; // jeśli używasz Date-fns
 
 let stompClient = null;
 
@@ -12,6 +13,10 @@ const Chat = ({ campaignId }) => {
     nickname: loggedInUser.nickname,
     connected: false,
     message: "",
+  });
+  const [rollData, setRollData] = useState({
+    rollType: "d6",
+    numberOfDice: 1,
   });
 
   const token = localStorage.getItem("token");
@@ -41,8 +46,26 @@ const Chat = ({ campaignId }) => {
 
   const onPublicMessageReceived = (payload) => {
     const payloadData = JSON.parse(payload.body);
-    console.log("Otrzymana wiadomość:", payloadData); // Dodaj logowanie
-    setPublicChats((prevChats) => [...prevChats, payloadData]);
+
+    console.log("Otrzymana wiadomość:", payloadData);
+
+    if (payloadData.content) {
+      console.log("To jest wiadomość tekstowa.");
+
+      setPublicChats((prevChats) => [
+        ...prevChats,
+        {
+          ...payloadData,
+          timestamp: payloadData.timestamp || payloadData.messageTime,
+        },
+      ]);
+    } else if (payloadData.rollResult) {
+      console.log("To jest wynik rzutu.");
+
+      setPublicChats((prevChats) => [...prevChats, payloadData]);
+    } else {
+      console.warn("Nieznany typ wiadomości:", payloadData);
+    }
   };
 
   const onError = (err) => {
@@ -54,6 +77,14 @@ const Chat = ({ campaignId }) => {
     setUserData({ ...userData, message: event.target.value });
   };
 
+  const handleRollTypeChange = (event) => {
+    setRollData({ ...rollData, rollType: event.target.value });
+  };
+
+  const handleNumberOfDiceChange = (event) => {
+    setRollData({ ...rollData, numberOfDice: parseInt(event.target.value) });
+  };
+
   const sendMessage = () => {
     if (
       stompClient &&
@@ -63,7 +94,7 @@ const Chat = ({ campaignId }) => {
       const chatMessage = {
         content: userData.message,
         userId: loggedInUser.userId,
-        nickname: loggedInUser.nickname, // Dodajemy nickname do wiadomości
+        nickname: loggedInUser.nickname,
         timestamp: new Date().toISOString(),
         type: "message",
       };
@@ -73,6 +104,22 @@ const Chat = ({ campaignId }) => {
         JSON.stringify(chatMessage)
       );
       setUserData({ ...userData, message: "" });
+    }
+  };
+
+  const sendRoll = () => {
+    if (stompClient && stompClient.connected) {
+      const rollMessage = {
+        rollType: rollData.rollType,
+        numberOfDice: rollData.numberOfDice,
+        userId: loggedInUser.userId,
+        nickname: loggedInUser.nickname,
+      };
+      stompClient.send(
+        `/app/roll/${campaignId}`,
+        {},
+        JSON.stringify(rollMessage)
+      );
     }
   };
 
@@ -101,7 +148,7 @@ const Chat = ({ campaignId }) => {
   const formatDate = (timestamp) => {
     if (!timestamp) return "";
     const date = new Date(timestamp);
-    if (isNaN(date.getTime())) return "";
+    if (isNaN(date.getTime())) return timestamp; // Zwraca oryginalny tekst, jeśli format nie jest poprawny
     return date.toLocaleString("default", {
       month: "2-digit",
       day: "2-digit",
@@ -116,8 +163,11 @@ const Chat = ({ campaignId }) => {
         {publicChats.map((chat, index) => (
           <div key={index}>
             <strong>{chat.nickname || "Nieznany użytkownik"}</strong>:{" "}
-            {chat.content}{" "}
-            <small>({formatDate(chat.timestamp || chat.messageTime)})</small>
+            {chat.content ||
+              `Rzucił: ${chat.numberOfDice}x ${chat.rollType} = ${
+                chat.rollResult
+              } (wyniki: ${chat.singleDiceResult?.join(", ")})`}{" "}
+            <small>({formatDate(chat.timestamp || chat.rollTime)})</small>
           </div>
         ))}
       </div>
@@ -129,6 +179,25 @@ const Chat = ({ campaignId }) => {
           onChange={handleMessageChange}
         />
         <button onClick={sendMessage}>Send</button>
+      </div>
+      <div>
+        <select value={rollData.rollType} onChange={handleRollTypeChange}>
+          <option value="d4">d4</option>
+          <option value="d6">d6</option>
+          <option value="d8">d8</option>
+          <option value="d10">d10</option>
+          <option value="d12">d12</option>
+          <option value="d20">d20</option>
+          <option value="d100">d100</option>
+        </select>
+        <input
+          type="number"
+          min="1"
+          value={rollData.numberOfDice}
+          onChange={handleNumberOfDiceChange}
+          placeholder="Liczba kości"
+        />
+        <button onClick={sendRoll}>Rzuć</button>
       </div>
     </div>
   );

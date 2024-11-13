@@ -47,6 +47,10 @@ public class Roll {
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
 
+    public String getNickname() {
+        return user != null ? user.getNickname() : "Nieznany użytkownik";
+    }
+
     public Roll(int rollResult, List<Integer> singleDiceResult, int numberOfDice, String rollType, LocalDateTime rollTime, User user, Campaign campaign) {
         this.rollResult = rollResult;
         this.singleDiceResult = singleDiceResult;

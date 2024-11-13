@@ -2,10 +2,11 @@ package com.rpgapp.rpg_webapp.rolls;
 
 import com.rpgapp.rpg_webapp.campaign.Campaign;
 import com.rpgapp.rpg_webapp.campaign.CampaignRepository;
-import com.rpgapp.rpg_webapp.campaign.CampaignService;
 import com.rpgapp.rpg_webapp.character.CharacterService;
 import com.rpgapp.rpg_webapp.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,21 +19,21 @@ public class RollService {
     private final RollRepository rollRepository;
     private final CharacterService characterService;
     private final CampaignRepository campaignRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public RollService(RollRepository rollRepository, CharacterService characterService, CampaignRepository campaignRepository) {
+    public RollService(RollRepository rollRepository, CharacterService characterService, CampaignRepository campaignRepository, SimpMessagingTemplate messagingTemplate) {
         this.rollRepository = rollRepository;
         this.characterService = characterService;
         this.campaignRepository = campaignRepository;
+        this.messagingTemplate = messagingTemplate;
     }
-
 
     public int diceRoll(int sides) {
         return (int) (Math.random() * sides) + 1;
     }
 
     public int getSides(String diceType) {
-
         return switch (diceType) {
             case "d4" -> 4;
             case "d6" -> 6;
@@ -44,6 +45,36 @@ public class RollService {
             default -> throw new IllegalArgumentException("Unknown dice type: " + diceType);
         };
     }
+
+    public void rollTheDiceWs(Roll roll, Long campaignId, SimpMessageHeaderAccessor headerAccessor) {
+        User user = characterService.getCurrentUserWS(headerAccessor); // Użycie metody z kontekstem WebSocket
+        roll.setUser(user);
+
+        int numberOfDice = roll.getNumberOfDice();
+        int sides = getSides(roll.getRollType());
+        List<Integer> singleDiceRolls = new ArrayList<>();
+        int result = 0;
+
+        for (int i = 0; i < numberOfDice; i++) {
+            int singleResult = diceRoll(sides);
+            singleDiceRolls.add(singleResult);
+            result += singleResult;
+        }
+
+        roll.setSingleDiceResult(singleDiceRolls);
+        roll.setRollResult(result);
+        roll.setRollTime(LocalDateTime.now());
+
+        Campaign campaign = campaignRepository.findById(campaignId)
+                .orElseThrow(() -> new IllegalArgumentException("Campaign not found"));
+        roll.setCampaign(campaign);
+
+        Roll savedRoll = rollRepository.save(roll);
+        messagingTemplate.convertAndSend("/chatroom/" + campaignId, savedRoll);
+    }
+
+
+
 
     public void rollTheDice(Roll roll, Long campaignId) {
         int numberOfDice = roll.getNumberOfDice();

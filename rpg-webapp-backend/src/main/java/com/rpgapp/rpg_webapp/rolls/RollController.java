@@ -5,6 +5,10 @@ import com.rpgapp.rpg_webapp.campaign.CampaignRepository;
 import com.rpgapp.rpg_webapp.campaign.CampaignService;
 import com.rpgapp.rpg_webapp.character.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,4 +33,10 @@ public class RollController {
         roll.setCampaign(campaign);
         rollService.rollTheDice(roll, campaignId);
     }
+
+    @MessageMapping("/roll/{campaignId}")
+    public void rollDice(@DestinationVariable long campaignId, @Payload Roll roll, SimpMessageHeaderAccessor headerAccessor) {
+        rollService.rollTheDiceWs(roll, campaignId, headerAccessor);
+    }
+
 }
