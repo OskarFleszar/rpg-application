@@ -18,7 +18,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/chatroom");
+        // Rejestracja brokerów dla chatroom i topic
+        config.enableSimpleBroker("/chatroom", "/topic");
         config.setApplicationDestinationPrefixes("/app");
     }
 
@@ -33,7 +34,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(authHandshakeInterceptor);
     }
-
-
-
 }
+

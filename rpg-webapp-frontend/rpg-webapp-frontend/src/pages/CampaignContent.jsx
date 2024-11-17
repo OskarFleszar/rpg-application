@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Chat from "../components/Chat";
+import DrawingBoard from "../components/DrawingBoard";
 
 const CampaignContent = () => {
   const { id } = useParams();
@@ -79,6 +80,7 @@ const CampaignContent = () => {
           </button>
         ))}
       <Chat campaignId={id} />
+      <DrawingBoard campaignId={id} />
     </div>
   );
 };
