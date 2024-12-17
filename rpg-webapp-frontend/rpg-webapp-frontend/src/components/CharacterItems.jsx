@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/CharacterItems.sass";
 
 const CharacterItems = ({ items = [], setItems }) => {
   const [newItem, setNewItem] = useState({
@@ -33,13 +34,13 @@ const CharacterItems = ({ items = [], setItems }) => {
   };
 
   return (
-    <div className="character-items">
+    <div className="character-items-container">
       {items.length > 0 ? (
-        <ul>
+        <>
           {items.map((item, index) => (
-            <li key={index}>
+            <li key={index} className="character-items-row">
               <div>
-                <label>Nazwa:</label>
+                <label>Name:</label>
                 <input
                   type="text"
                   name="name"
@@ -48,46 +49,54 @@ const CharacterItems = ({ items = [], setItems }) => {
                 />
               </div>
               <div>
-                <label>Opis:</label>
-                <input
+                <label>Description:</label>
+                <textarea
                   type="text"
                   name="description"
                   value={item.description}
                   onChange={(e) => handleItemChange(index, e)}
                 />
               </div>
-              <button type="button" onClick={() => handleDeleteItem(index)}>
-                Usuń
+              <button
+                type="button"
+                className="delete-button"
+                onClick={() => handleDeleteItem(index)}
+              >
+                Delete
               </button>
             </li>
           ))}
-        </ul>
+        </>
       ) : (
-        <p>Brak</p>
+        <p></p>
       )}
 
-      <div>
-        <label>Nazwa:</label>
-        <input
-          type="text"
-          name="name"
-          value={newItem.name}
-          onChange={handleNewItemChange}
-        />
+      <div className="character-items-row">
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={newItem.name}
+            onChange={handleNewItemChange}
+          />
+        </div>
+        <div>
+          <label>Description:</label>
+          <input
+            type="text"
+            name="description"
+            value={newItem.description}
+            onChange={handleNewItemChange}
+          />
+        </div>
       </div>
-
-      <div>
-        <label>Opis:</label>
-        <input
-          type="text"
-          name="description"
-          value={newItem.description}
-          onChange={handleNewItemChange}
-        />
-      </div>
-
-      <button type="button" onClick={handleAddItem}>
-        Dodaj
+      <button
+        type="button"
+        className="character-button"
+        onClick={handleAddItem}
+      >
+        Add
       </button>
     </div>
   );

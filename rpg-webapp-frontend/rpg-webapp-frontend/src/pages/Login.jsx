@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/RegisterLogin.sass";
 
@@ -6,6 +7,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,6 +26,8 @@ function Login() {
 
       const loginEvent = new Event("login");
       window.dispatchEvent(loginEvent);
+
+      navigate("/"); // Przekierowanie na stronę główną
     } catch (error) {
       setError("Nieprawidłowy email lub hasło");
     }
@@ -37,11 +41,7 @@ function Login() {
         },
       });
 
-      // Konwertujemy dane na JSON przed zapisaniem
       localStorage.setItem("userData", JSON.stringify(response.data));
-      // Odczytujemy i konwertujemy JSON na obiekt
-      const loggedInUser = JSON.parse(localStorage.getItem("userData"));
-      console.log("zalogowany użytkownik: ", loggedInUser);
     } catch (error) {
       console.error("Błąd przy pobieraniu danych użytkownika:", error);
     }

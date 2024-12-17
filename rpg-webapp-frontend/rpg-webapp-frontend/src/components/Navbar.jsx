@@ -6,7 +6,6 @@ function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Sprawdź token w localStorage przy załadowaniu komponentu
     const token = localStorage.getItem("token");
     if (token) {
       setLoggedIn(true);
@@ -41,9 +40,9 @@ function Navbar() {
         <h1>RPG</h1>
       </div>
       <div className="navbar-center">
-        {loggedIn ? <Link to="/campaigns">Campaigns</Link> : null}
         <Link to="/">Home</Link>
-        {loggedIn ? <Link to="/characters">Characters</Link> : null}
+        {loggedIn && <Link to="/campaigns">Campaigns</Link>}
+        {loggedIn && <Link to="/characters">Characters</Link>}
       </div>
       <div className="navbar-right">
         {loggedIn ? (

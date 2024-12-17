@@ -45,26 +45,27 @@ public class Skills {
 
     // Metoda do inicjalizacji umiejętności podstawowych
     private void initializeBasicSkills() {
-        addSkill("Charakteryzacja", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Dowodzenie", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Hazard", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Jeździectwo", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Mocna głowa", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Opieka na zwierzętami", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Plotkowanie", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Pływanie", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Powożenie", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Przekonywanie", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Przeszukiwanie", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Skradanie się", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Spostrzegawczość", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Sztuka przetrwania", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Targowanie", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Ukrywanie się", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Wioślarstwo", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Wspinaczka", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Wycena", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
-        addSkill("Zastraszanie", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Disguise", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Leadership", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Gambling", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Riding", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Strong Head", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Animal Care", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Gossip", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Swimming", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Driving", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Persuasion", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Searching", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Sneaking", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Perception", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Survival", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Bargaining", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Hiding", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Rowing", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Climbing", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Appraisal", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+        addSkill("Intimidation", SkillLevel.NOT_PURCHASED, SkillType.BASIC);
+
     }
 
     // Metoda do dodawania umiejętności

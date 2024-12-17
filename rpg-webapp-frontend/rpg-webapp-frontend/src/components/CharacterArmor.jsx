@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/CharacterArmor.sass";
 
 const CharacterArmor = ({ armor = [], setArmor }) => {
   const [newArmor, setNewArmor] = useState({
@@ -34,13 +35,13 @@ const CharacterArmor = ({ armor = [], setArmor }) => {
   };
 
   return (
-    <div className="character-armor">
+    <div className="character-armor-container">
       {armor.length > 0 ? (
-        <ul>
+        <>
           {armor.map((armorItem, index) => (
-            <li key={index}>
+            <li key={index} className="character-armor-row">
               <div>
-                <label>Typ:</label>
+                <label>Type:</label>
                 <input
                   type="text"
                   name="armorType"
@@ -49,7 +50,7 @@ const CharacterArmor = ({ armor = [], setArmor }) => {
                 />
               </div>
               <div>
-                <label>Lokacja:</label>
+                <label>Location:</label>
                 <input
                   type="text"
                   name="location"
@@ -58,7 +59,7 @@ const CharacterArmor = ({ armor = [], setArmor }) => {
                 />
               </div>
               <div>
-                <label>Punkty Zbroi:</label>
+                <label>Armor points:</label>
                 <input
                   type="text"
                   name="armorPoints"
@@ -66,49 +67,56 @@ const CharacterArmor = ({ armor = [], setArmor }) => {
                   onChange={(e) => handleArmorChange(index, e)}
                 />
               </div>
-              <button type="button" onClick={() => handleDeleteArmor(index)}>
-                Usuń
+              <button
+                type="button"
+                className="delete-button"
+                onClick={() => handleDeleteArmor(index)}
+              >
+                Delete
               </button>
             </li>
           ))}
-        </ul>
+        </>
       ) : (
-        <p>Brak Zbroi do wyświetlenia</p>
+        <p></p>
       )}
 
-      <h4>Dodaj nową zbroje</h4>
-      <div>
-        <label>Typ:</label>
-        <input
-          type="text"
-          name="armorType"
-          value={newArmor.armorType}
-          onChange={handleNewArmorChange}
-        />
+      <h4>Add new armor</h4>
+      <div className="character-armor-row">
+        <div>
+          <label>Type:</label>
+          <input
+            type="text"
+            name="armorType"
+            value={newArmor.armorType}
+            onChange={handleNewArmorChange}
+          />
+        </div>
+        <div>
+          <label>Location:</label>
+          <input
+            type="text"
+            name="location"
+            value={newArmor.location}
+            onChange={handleNewArmorChange}
+          />
+        </div>
+        <div>
+          <label>Armor points:</label>
+          <input
+            type="text"
+            name="armorPoints"
+            value={newArmor.armorPoints}
+            onChange={handleNewArmorChange}
+          />
+        </div>
       </div>
-
-      <div>
-        <label>Lokacja:</label>
-        <input
-          type="text"
-          name="location"
-          value={newArmor.location}
-          onChange={handleNewArmorChange}
-        />
-      </div>
-
-      <div>
-        <label>Punkty Zbroi:</label>
-        <input
-          type="text"
-          name="armorPoints"
-          value={newArmor.armorPoints}
-          onChange={handleNewArmorChange}
-        />
-      </div>
-
-      <button type="button" onClick={handleAddArmor}>
-        Dodaj armor
+      <button
+        type="button"
+        className="character-button"
+        onClick={handleAddArmor}
+      >
+        Add armor
       </button>
     </div>
   );

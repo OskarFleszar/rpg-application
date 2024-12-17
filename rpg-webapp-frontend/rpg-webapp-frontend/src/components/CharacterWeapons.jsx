@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/CharacterWeapons.sass";
 
 const CharacterWeapons = ({ weapons = [], setWeapons }) => {
   const [newWeapon, setNewWeapon] = useState({
@@ -42,13 +43,13 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
   };
 
   return (
-    <div className="character-weapons">
-      {weapons.length > 0 ? (
-        <ul>
+    <div className="character-weapons weapons-container">
+      {weapons.length > 0 && (
+        <>
           {weapons.map((weapon, index) => (
-            <li key={index}>
+            <li key={index} className="form-row">
               <div>
-                <label>Nazwa:</label>
+                <label>Name:</label>
                 <input
                   type="text"
                   name="name"
@@ -57,7 +58,7 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
                 />
               </div>
               <div>
-                <label>Kategoria:</label>
+                <label>Category:</label>
                 <input
                   type="text"
                   name="category"
@@ -66,7 +67,7 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
                 />
               </div>
               <div>
-                <label>Siła:</label>
+                <label>Strength:</label>
                 <input
                   type="text"
                   name="strength"
@@ -75,16 +76,16 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
                 />
               </div>
               <div>
-                <label>Zasięg:</label>
+                <label>Range:</label>
                 <input
-                  type="number"
+                  type="text"
                   name="range"
                   value={weapon.range}
                   onChange={(e) => handleWeaponChange(index, e)}
                 />
               </div>
               <div>
-                <label>Atrybuty:</label>
+                <label>Attributes:</label>
                 <input
                   type="text"
                   name="weaponAttributes"
@@ -92,69 +93,68 @@ const CharacterWeapons = ({ weapons = [], setWeapons }) => {
                   onChange={(e) => handleWeaponChange(index, e)}
                 />
               </div>
-              <button type="button" onClick={() => handleDeleteWeapon(index)}>
-                Usuń
+              <button
+                type="button"
+                className="delete-button"
+                onClick={() => handleDeleteWeapon(index)}
+              >
+                Delete
               </button>
             </li>
           ))}
-        </ul>
-      ) : (
-        <p>Brak broni do wyświetlenia</p>
+        </>
       )}
 
-      <h4>Dodaj nową broń</h4>
-      <div>
-        <label>Nazwa:</label>
-        <input
-          type="text"
-          name="name"
-          value={newWeapon.name}
-          onChange={handleNewWeaponChange}
-        />
+      <h4>Add new weapon</h4>
+      <div className="form-row">
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={newWeapon.name}
+            onChange={handleNewWeaponChange}
+          />
+        </div>
+        <div>
+          <label>Category:</label>
+          <input
+            type="text"
+            name="category"
+            value={newWeapon.category}
+            onChange={handleNewWeaponChange}
+          />
+        </div>
+        <div>
+          <label>Strength:</label>
+          <input
+            type="text"
+            name="strength"
+            value={newWeapon.strength}
+            onChange={handleNewWeaponChange}
+          />
+        </div>
+        <div>
+          <label>Range:</label>
+          <input
+            type="text"
+            name="range"
+            value={newWeapon.range}
+            onChange={handleNewWeaponChange}
+          />
+        </div>
+        <div>
+          <label>Attributes:</label>
+          <input
+            type="text"
+            name="weaponAttributes"
+            value={newWeapon.weaponAttributes}
+            onChange={handleNewWeaponChange}
+          />
+        </div>
       </div>
-
-      <div>
-        <label>Kategoria:</label>
-        <input
-          type="text"
-          name="category"
-          value={newWeapon.category}
-          onChange={handleNewWeaponChange}
-        />
-      </div>
-
-      <div>
-        <label>Siła:</label>
-        <input
-          type="text"
-          name="strength"
-          value={newWeapon.strength}
-          onChange={handleNewWeaponChange}
-        />
-      </div>
-
-      <div>
-        <label>Zasięg:</label>
-        <input
-          type="number"
-          name="range"
-          value={newWeapon.range}
-          onChange={handleNewWeaponChange}
-        />
-      </div>
-
-      <div>
-        <label>Atrybuty:</label>
-        <input
-          type="text"
-          name="weaponAttributes"
-          value={newWeapon.weaponAttributes}
-          onChange={handleNewWeaponChange}
-        />
-      </div>
-
-      <button type="button" onClick={handleAddWeapon}>
-        Dodaj broń
+      <button type="button" className="small-button" onClick={handleAddWeapon}>
+        Add weapon
       </button>
     </div>
   );

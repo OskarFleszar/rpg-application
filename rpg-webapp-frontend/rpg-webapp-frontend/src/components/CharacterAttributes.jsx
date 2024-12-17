@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/CharacterAttributes.sass";
 
 const CharacterAttributes = ({ attributes, setAttributes }) => {
   // Sprawdzenie, czy `attributes` zawiera dane
@@ -18,39 +19,51 @@ const CharacterAttributes = ({ attributes, setAttributes }) => {
 
   return (
     <div className="character-attributes">
-      <h2>Atrybuty</h2>
-      {/* Renderowanie atrybutów */}
-      {Object.entries(attributes).map(([key, attr]) => (
-        <div key={key} className="attribute-row">
-          <label>{key}</label>
-          <div className="attribute-inputs">
-            <input
-              type="number"
-              placeholder="Base"
-              value={attr.baseValue || 0}
-              onChange={(e) =>
-                handleAttributeChange(key, "baseValue", e.target.value)
-              }
-            />
-            <input
-              type="number"
-              placeholder="Advancement"
-              value={attr.advancementPoints || 0}
-              onChange={(e) =>
-                handleAttributeChange(key, "advancementPoints", e.target.value)
-              }
-            />
-            <input
-              type="number"
-              placeholder="Current"
-              value={attr.currentValue || 0}
-              onChange={(e) =>
-                handleAttributeChange(key, "currentValue", e.target.value)
-              }
-            />
-          </div>
+      <div className="attributes-container">
+        <div className="attributes-grid">
+          {Object.entries(attributes).map(([key, attr]) => (
+            <div className="attribute-group" key={key}>
+              <div className="attribute-name">{key}</div>
+              <div className="attribute-values">
+                <div className="value-label">Starting value</div>
+                <div className="value-input">
+                  <input
+                    type="number"
+                    value={attr.baseValue || 0}
+                    onChange={(e) =>
+                      handleAttributeChange(key, "baseValue", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="value-label">Advancement</div>
+                <div className="value-input">
+                  <input
+                    type="number"
+                    value={attr.advancementPoints || 0}
+                    onChange={(e) =>
+                      handleAttributeChange(
+                        key,
+                        "advancementPoints",
+                        e.target.value
+                      )
+                    }
+                  />
+                </div>
+                <div className="value-label">Current</div>
+                <div className="value-input">
+                  <input
+                    type="number"
+                    value={attr.currentValue || 0}
+                    onChange={(e) =>
+                      handleAttributeChange(key, "currentValue", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 };

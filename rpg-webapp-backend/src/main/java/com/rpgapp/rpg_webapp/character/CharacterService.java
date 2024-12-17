@@ -38,7 +38,7 @@ public class CharacterService {
     }
 
     public User getCurrentUserWS(SimpMessageHeaderAccessor headerAccessor) {
-        // Najpierw sprawdzamy sesję WebSocket (jeśli headerAccessor jest dostępny)
+
             UserDetails userDetails = (UserDetails) headerAccessor.getSessionAttributes().get("user");
                 String email = userDetails.getUsername();
                 return userRepository.findUserByEmail(email)

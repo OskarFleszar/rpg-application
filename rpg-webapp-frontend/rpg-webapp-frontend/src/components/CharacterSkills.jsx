@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/CharacterSkills.sass";
 
 const CharacterSkills = ({ skills, setSkills }) => {
   const [newSkillName, setNewSkillName] = useState("");
@@ -28,91 +29,88 @@ const CharacterSkills = ({ skills, setSkills }) => {
 
   return (
     <div className="character-skills">
-      <h2>Umiejętności</h2>
+      <div className="skills-container">
+        {/* Podstawowe Umiejętności - Lewa Kolumna */}
+        <div className="skills-column base-skills">
+          <h3>Basic Skills</h3>
+          {baseSkills.map(([skillName, skillInfo]) => (
+            <div key={skillName} className="skill-row">
+              <label>{skillName}</label>
+              <div className="skill-options">
+                {["NOT_PURCHASED", "PURCHASED", "PLUS_10", "PLUS_20"].map(
+                  (level) => (
+                    <label key={level}>
+                      <input
+                        type="radio"
+                        name={skillName}
+                        value={level}
+                        checked={skillInfo.level === level}
+                        onChange={() => {
+                          setSkills((prevSkills) => ({
+                            ...prevSkills,
+                            [skillName]: {
+                              ...skillInfo,
+                              level: level,
+                            },
+                          }));
+                        }}
+                      />
+                      {level.replace("_", " ")}
+                    </label>
+                  )
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
 
-      {/* Display Base Skills */}
-      <h3>Umiejętności Bazowe</h3>
-      {baseSkills.map(([skillName, skillInfo]) => (
-        <div key={skillName} className="skill-row">
-          <label>{skillName}</label>
-          <div className="skill-options">
-            {["NOT_PURCHASED", "PURCHASED", "PLUS_10", "PLUS_20"].map(
-              (level) => {
-                const isChecked = skillInfo.level === level;
+        {/* Zaawansowane Umiejętności - Prawa Kolumna */}
+        <div className="skills-column advanced-skills">
+          <h3>Advanced Skills</h3>
+          {customSkills.map(([skillName, skillInfo]) => (
+            <div key={skillName} className="skill-row">
+              <label>{skillName}</label>
+              <div className="skill-options">
+                {["NOT_PURCHASED", "PURCHASED", "PLUS_10", "PLUS_20"].map(
+                  (level) => (
+                    <label key={level}>
+                      <input
+                        type="radio"
+                        name={skillName}
+                        value={level}
+                        checked={skillInfo.level === level}
+                        onChange={() => {
+                          setSkills((prevSkills) => ({
+                            ...prevSkills,
+                            [skillName]: {
+                              ...skillInfo,
+                              level: level,
+                            },
+                          }));
+                        }}
+                      />
+                      {level.replace("_", " ")}
+                    </label>
+                  )
+                )}
+              </div>
+            </div>
+          ))}
 
-                return (
-                  <label key={level}>
-                    <input
-                      type="radio"
-                      name={skillName}
-                      value={level}
-                      checked={isChecked}
-                      onChange={() => {
-                        setSkills((prevSkills) => ({
-                          ...prevSkills,
-                          [skillName]: {
-                            ...prevSkills[skillName],
-                            level: level,
-                          },
-                        }));
-                      }}
-                    />
-                    {level.replace("_", " ")}
-                  </label>
-                );
-              }
-            )}
+          {/* Dodanie nowego skilla */}
+          <div className="add-skill-form">
+            <h4>Add a new skill</h4>
+            <input
+              type="text"
+              placeholder="Skill name"
+              value={newSkillName}
+              onChange={(e) => setNewSkillName(e.target.value)}
+            />
+            <button type="button" onClick={handleAddSkill}>
+              Add a skill
+            </button>
           </div>
         </div>
-      ))}
-
-      {/* Display Custom Skills */}
-      <h3>Zaawansowane Umiejętności</h3>
-      {customSkills.map(([skillName, skillInfo]) => (
-        <div key={skillName} className="skill-row">
-          <label>{skillName}</label>
-          <div className="skill-options">
-            {["NOT_PURCHASED", "PURCHASED", "PLUS_10", "PLUS_20"].map(
-              (level) => {
-                const isChecked = skillInfo.level === level;
-
-                return (
-                  <label key={level}>
-                    <input
-                      type="radio"
-                      name={skillName}
-                      value={level}
-                      checked={isChecked}
-                      onChange={() => {
-                        setSkills((prevSkills) => ({
-                          ...prevSkills,
-                          [skillName]: {
-                            ...prevSkills[skillName],
-                            level: level,
-                          },
-                        }));
-                      }}
-                    />
-                    {level.replace("_", " ")}
-                  </label>
-                );
-              }
-            )}
-          </div>
-        </div>
-      ))}
-
-      {/* Form to add new skill */}
-      <div className="add-skill-form">
-        <input
-          type="text"
-          placeholder="Nazwa nowego skilla"
-          value={newSkillName}
-          onChange={(e) => setNewSkillName(e.target.value)}
-        />
-        <button type="button" onClick={handleAddSkill}>
-          Dodaj umiejętność
-        </button>
       </div>
     </div>
   );

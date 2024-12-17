@@ -17,14 +17,14 @@ public class DrawingService {
     private final DrawingRepository drawingRepository;
     private final CampaignRepository campaignRepository;
     private final CharacterService characterService;
-    private final SimpMessagingTemplate messagingTemplate; // Dodanie SimpMessagingTemplate
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
     public DrawingService(
             DrawingRepository drawingRepository,
             CampaignRepository campaignRepository,
             CharacterService characterService,
-            SimpMessagingTemplate messagingTemplate // Wstrzyknięcie SimpMessagingTemplate
+            SimpMessagingTemplate messagingTemplate
     ) {
         this.drawingRepository = drawingRepository;
         this.campaignRepository = campaignRepository;
@@ -38,15 +38,13 @@ public class DrawingService {
                 .orElseThrow(() -> new IllegalArgumentException("Campaign not found"));
 
         Drawing drawing = new Drawing();
-        drawing.setDrawingData(drawingData); // Ustawienie danych rysunku (ścieżki JSON)
+        drawing.setDrawingData(drawingData);
         drawing.setUser(user);
         drawing.setCampaign(campaign);
         drawing.setCreatedTime(LocalDateTime.now());
 
-        // Zapisanie rysunku w bazie danych
         Drawing savedDrawing = drawingRepository.save(drawing);
 
-        // Wysłanie wiadomości na temat WebSocket
         messagingTemplate.convertAndSend("/topic/" + campaignId, savedDrawing);
 
 

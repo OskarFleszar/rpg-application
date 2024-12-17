@@ -56,7 +56,7 @@ const Campaigns = () => {
 
   return (
     <div className="characters-list">
-      <h2>Twoje kampane</h2>
+      <h2>Your Campaigns</h2>
       <div className="characters-container">
         {campaigns.map((campaign, index) => (
           <CampaignCard

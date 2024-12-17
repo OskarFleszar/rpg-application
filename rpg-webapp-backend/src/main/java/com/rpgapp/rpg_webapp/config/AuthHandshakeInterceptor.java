@@ -29,13 +29,13 @@ public class AuthHandshakeInterceptor implements ChannelInterceptor {
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             if (token != null && token.startsWith("Bearer ")) {
-                token = token.substring(7); // Usuń "Bearer "
+                token = token.substring(7);
                 String username = jwtService.extractUsername(token);
 
                 if (username != null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                     if (jwtService.isTokenValid(token, userDetails)) {
-                        accessor.getSessionAttributes().put("user", userDetails); // Zapisz użytkownika w sesji
+                        accessor.getSessionAttributes().put("user", userDetails);
                         return message;
                     }
                 }

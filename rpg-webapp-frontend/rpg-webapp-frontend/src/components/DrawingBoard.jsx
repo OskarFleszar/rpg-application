@@ -2,13 +2,14 @@ import React, { useRef, useEffect, useState } from "react";
 import { over } from "stompjs";
 import SockJS from "sockjs-client/dist/sockjs";
 import axios from "axios";
+import "../styles/DrawingBoard.sass";
 
 let stompClient = null;
 
 const DrawingBoard = ({ campaignId }) => {
   const canvasRef = useRef(null);
   const subscribedRef = useRef(false);
-  const [drawings, setDrawings] = useState([]); // Wszystkie rysunki
+  const [drawings, setDrawings] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [drawingData, setDrawingData] = useState({
     color: "#000000",
@@ -18,9 +19,8 @@ const DrawingBoard = ({ campaignId }) => {
   const token = localStorage.getItem("token");
   const loggedInUser = JSON.parse(localStorage.getItem("userData"));
 
-  const MAX_BATCH_SIZE = 100; // Maksymalny rozmiar batcha (np. 100 punktów)
+  const MAX_BATCH_SIZE = 100;
 
-  // WebSocket connection setup
   const connectWebSocket = () => {
     if (stompClient && stompClient.connected) return;
 
@@ -79,7 +79,6 @@ const DrawingBoard = ({ campaignId }) => {
         points: batchPoints,
       };
 
-      // Wysyłamy każdą porcję osobno
       stompClient.send(
         `/app/drawing/${campaignId}`,
         {},
@@ -95,10 +94,10 @@ const DrawingBoard = ({ campaignId }) => {
 
   const sendDrawing = () => {
     if (stompClient && stompClient.connected && drawingData.points.length > 0) {
-      sendDrawingInBatches(drawingData); // Wysyłamy dane w porcjach
-      setDrawings((prev) => [...prev, drawingData]); // Dodajemy lokalny rysunek
-      renderDrawing(drawingData); // Rysujemy lokalnie
-      setDrawingData((prev) => ({ ...prev, points: [] })); // Resetujemy punkty po wysłaniu
+      sendDrawingInBatches(drawingData);
+      setDrawings((prev) => [...prev, drawingData]);
+      renderDrawing(drawingData);
+      setDrawingData((prev) => ({ ...prev, points: [] }));
     } else {
       console.error(
         "WebSocket nie jest połączony lub brak punktów do wysłania"
@@ -116,7 +115,7 @@ const DrawingBoard = ({ campaignId }) => {
           const parsedDrawings = response.data.map((drawing) => {
             try {
               const mainData = JSON.parse(drawing.drawingData);
-              return JSON.parse(mainData.drawingData); // Parse twice
+              return JSON.parse(mainData.drawingData);
             } catch (err) {
               console.error("Błąd podczas parsowania rysunku:", err, drawing);
               return null;
@@ -218,8 +217,8 @@ const DrawingBoard = ({ campaignId }) => {
   }, [drawings]);
 
   return (
-    <div>
-      <div style={{ marginBottom: "20px" }}>
+    <div className="drawing-board-container">
+      <div className="controls">
         <label>
           Kolor linii:
           <input
@@ -231,7 +230,7 @@ const DrawingBoard = ({ campaignId }) => {
             style={{ marginLeft: "10px" }}
           />
         </label>
-        <label style={{ marginLeft: "20px" }}>
+        <label style={{ marginTop: "20px" }}>
           Szerokość linii:
           <input
             type="number"
@@ -250,9 +249,9 @@ const DrawingBoard = ({ campaignId }) => {
       </div>
       <canvas
         ref={canvasRef}
-        width={800}
-        height={600}
-        style={{ border: "1px solid black", backgroundColor: "white" }}
+        className="canvas"
+        width={1000}
+        height={800}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}

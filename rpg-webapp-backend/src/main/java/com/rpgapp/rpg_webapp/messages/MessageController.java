@@ -42,7 +42,6 @@ public class MessageController {
                 .orElseThrow(() -> new IllegalArgumentException("Campaign not found"));
         message.setCampaign(campaign);
 
-        // Wywołujemy sendMessageWs, który zapisze wiadomość i rozgłosi ją do innych klientów
         messageService.sendMessageWs(message, headerAccessor);
     }
 }

@@ -18,7 +18,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        // Rejestracja brokerów dla chatroom i topic
         config.enableSimpleBroker("/chatroom", "/topic");
         config.setApplicationDestinationPrefixes("/app");
     }

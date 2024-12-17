@@ -1,18 +1,17 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Chat from "../components/Chat";
 import DrawingBoard from "../components/DrawingBoard";
+import "../styles/CampaignContent.sass";
+import axios from "axios";
 
 const CampaignContent = () => {
   const { id } = useParams();
   const [addUserNickname, setAddUserNickname] = useState("");
   const [showAddUserInput, setShowAddUserInput] = useState(false);
-  const [campaignData, setCampaignData] = useState(null);
   const [isGameMaster, setIsGameMaster] = useState(false);
 
   useEffect(() => {
-    // Funkcja do pobrania danych kampanii
     const fetchCampaignData = async () => {
       try {
         const response = await axios.get(
@@ -24,13 +23,17 @@ const CampaignContent = () => {
           }
         );
 
-        setCampaignData(response.data);
-
         const loggedInUser = JSON.parse(localStorage.getItem("userData"));
-        console.log("zalogowany użytkownik: ", loggedInUser.userId);
-
         if (response.data.gameMaster.userId === parseInt(loggedInUser.userId)) {
           setIsGameMaster(true);
+          console.log(
+            "id gracza:",
+            parseInt(loggedInUser.userId),
+            "id gamemastera: ",
+            response.data.gameMaster.userId,
+            "   ",
+            isGameMaster
+          );
         }
       } catch (error) {
         console.error("Błąd podczas pobierania danych kampanii:", error);
@@ -62,25 +65,36 @@ const CampaignContent = () => {
 
   return (
     <div>
-      {isGameMaster &&
-        (showAddUserInput ? (
-          <div>
-            <input
-              type="text"
-              placeholder="nickname"
-              value={addUserNickname}
-              onChange={(e) => setAddUserNickname(e.target.value)}
-            />
-            <button onClick={handleAddPlayer}>Dodaj</button>
-            <button onClick={() => setShowAddUserInput(false)}>Anuluj</button>
-          </div>
-        ) : (
-          <button onClick={() => setShowAddUserInput(true)}>
-            Dodaj nowego użytkownika
-          </button>
-        ))}
-      <Chat campaignId={id} />
-      <DrawingBoard campaignId={id} />
+      <div className="left-panel">
+        {isGameMaster &&
+          (showAddUserInput ? (
+            <div>
+              <input
+                type="text"
+                placeholder="Nickname"
+                value={addUserNickname}
+                onChange={(e) => setAddUserNickname(e.target.value)}
+              />
+              <button onClick={handleAddPlayer}>Dodaj</button>
+              <button onClick={() => setShowAddUserInput(false)}>Anuluj</button>
+            </div>
+          ) : (
+            <button
+              className="add-player"
+              onClick={() => setShowAddUserInput(true)}
+            >
+              Dodaj nowego użytkownika
+            </button>
+          ))}
+      </div>
+      <div className="campaign-container">
+        <div>
+          <DrawingBoard campaignId={id} />
+        </div>
+        <div className="chat-container">
+          <Chat campaignId={id} />
+        </div>
+      </div>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { over } from "stompjs";
 import SockJS from "sockjs-client/dist/sockjs";
 import axios from "axios";
-// import { parseISO, format } from "date-fns"; // jeśli używasz Date-fns
+import "../styles/Chat.sass";
 
 let stompClient = null;
 
@@ -15,7 +15,7 @@ const Chat = ({ campaignId }) => {
     message: "",
   });
   const [rollData, setRollData] = useState({
-    rollType: "d6",
+    rollType: "d100",
     numberOfDice: 1,
   });
 
@@ -157,30 +157,42 @@ const Chat = ({ campaignId }) => {
     });
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  };
+
   return (
-    <div>
-      <div>
+    <div className="chat-container">
+      <div className="chat-header">Chat</div>
+      <div className="chat-messages">
         {publicChats.map((chat, index) => (
-          <div key={index}>
+          <div
+            key={index}
+            className="chat-message"
+            title={formatDate(chat.timestamp || chat.rollTime)}
+          >
             <strong>{chat.nickname || "Nieznany użytkownik"}</strong>:{" "}
             {chat.content ||
               `Rzucił: ${chat.numberOfDice}x ${chat.rollType} = ${
                 chat.rollResult
-              } (wyniki: ${chat.singleDiceResult?.join(", ")})`}{" "}
-            <small>({formatDate(chat.timestamp || chat.rollTime)})</small>
+              } (wyniki: ${chat.singleDiceResult?.join(", ")})`}
           </div>
         ))}
       </div>
-      <div>
+
+      <div className="chat-input">
         <input
           type="text"
           placeholder="Napisz wiadomość..."
           value={userData.message}
           onChange={handleMessageChange}
+          onKeyDown={handleKeyPress}
         />
         <button onClick={sendMessage}>Send</button>
       </div>
-      <div>
+      <div className="chat-input">
         <select value={rollData.rollType} onChange={handleRollTypeChange}>
           <option value="d4">d4</option>
           <option value="d6">d6</option>

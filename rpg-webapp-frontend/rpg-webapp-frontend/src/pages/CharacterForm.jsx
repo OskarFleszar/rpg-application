@@ -4,9 +4,9 @@ import CharacterSkills from "../components/CharacterSkills";
 import CharacterWeapons from "../components/CharacterWeapons";
 import CharacterArmor from "../components/CharacterArmor";
 import CharacterItems from "../components/CharacterItems";
-import "../styles/CharacterCreator.sass";
 import axios from "axios";
 import "../styles/CharacterForm.sass";
+
 import CharacterAttributes from "../components/CharacterAttributes";
 
 const CharacterForm = () => {
@@ -252,275 +252,286 @@ const CharacterForm = () => {
   };
 
   return (
-    <div className="character-details">
-      <div className="character-image">
-        {imageUrl ? (
-          isEditingImage ? (
-            <>
+    <div className="character-details-container">
+      <div className="character-details">
+        <div className="character-image">
+          {imageUrl ? (
+            isEditingImage ? (
+              <>
+                <img className="img" src={imageUrl} alt="Profile" />
+                <input type="file" onChange={handleImageChange} />
+                <button onClick={handleImageUpload}>Upload Image</button>
+              </>
+            ) : (
               <img className="img" src={imageUrl} alt="Profile" />
-              <input type="file" onChange={handleImageChange} />
-              <button onClick={handleImageUpload}>Prześlij zdjęcie</button>
-            </>
+            )
           ) : (
-            <img className="img" src={imageUrl} alt="Profile" />
-          )
-        ) : (
-          <>
-            <input type="file" onChange={handleImageChange} />
-            <button onClick={handleImageUpload}>Prześlij zdjęcie</button>
-          </>
-        )}
-      </div>
-      <div>
-        {isEditingImage ? (
-          <button onClick={handleEdit}>Edytuj</button>
-        ) : (
-          <button onClick={handleEdit}>Anuluj</button>
-        )}
-      </div>
-      <h2>Edytuj Postać</h2>
-      <form>
-        <div>
-          <label>Nazwa postaci:</label>
-          <input
-            type="text"
-            name="name"
-            value={character.name || ""}
-            onChange={handleChange}
-          />
+            <>
+              <input type="file" onChange={handleImageChange} />
+              <button onClick={handleImageUpload}>Upload Image</button>
+            </>
+          )}
         </div>
         <div>
-          <label>Rasa:</label>
-          <input
-            type="text"
-            name="race"
-            value={character.race || ""}
-            onChange={handleChange}
-          />
+          {isEditingImage ? (
+            <button onClick={handleEdit}>Cancel</button>
+          ) : (
+            <button onClick={handleEdit}>Edit</button>
+          )}
         </div>
-        <div>
-          <label>Profesja:</label>
-          <input
-            type="text"
-            name="currentProfession"
-            value={character.currentProfession || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Poprzednia profesja:</label>
-          <input
-            type="text"
-            name="lastProfession"
-            value={character.lastProfession || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Kampania:</label>
-          <input
-            type="text"
-            name="campaignName"
-            value={character.campaignName || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Rok Kampanii:</label>
-          <input
-            type="text"
-            name="campaignYear"
-            value={character.campaignYear || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Wiek:</label>
-          <input
-            type="number"
-            name="age"
-            value={character.age || 0}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Płeć:</label>
-          <input
-            type="text"
-            name="gender"
-            value={character.gender || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Kolor oczu:</label>
-          <input
-            type="text"
-            name="eyeColor"
-            value={character.eyeColor || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Waga:</label>
-          <input
-            type="number"
-            name="weight"
-            value={character.weight || 0}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Kolor włosów:</label>
-          <input
-            type="text"
-            name="hairColor"
-            value={character.hairColor || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Wzrost:</label>
-          <input
-            type="number"
-            name="height"
-            value={character.height || 0}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Znak gwiezdny:</label>
-          <input
-            type="text"
-            name="starSign"
-            value={character.starSign || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Rodzeństwo:</label>
-          <input
-            type="number"
-            name="siblings"
-            value={character.siblings || 0}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Miejsce urodzenia:</label>
-          <input
-            type="text"
-            name="birthPlace"
-            value={character.birthPlace || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Znaki szczegolne:</label>
-          <input
-            type="text"
-            name="specialSigns"
-            value={character.specialSigns || ""}
-            onChange={handleChange}
-          />
-        </div>
-        <h3>Exp</h3>
-        <div>
-          <label>Obecny Exp:</label>
-          <input
-            type="number"
-            name="currentExp"
-            value={character.currentExp || 0}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Total Exp:</label>
-          <input
-            type="number"
-            name="totalExp"
-            value={character.totalExp || 0}
-            onChange={handleChange}
-          />
-        </div>
-        {/* Sekcja Cech */}
-        <h3>Cechy</h3>
+        <form>
+          <div>
+            <label>Character Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={character.name || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Race:</label>
+            <input
+              type="text"
+              name="race"
+              value={character.race || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Profession:</label>
+            <input
+              type="text"
+              name="currentProfession"
+              value={character.currentProfession || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Previous Profession:</label>
+            <input
+              type="text"
+              name="lastProfession"
+              value={character.lastProfession || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Campaign:</label>
+            <input
+              type="text"
+              name="campaignName"
+              value={character.campaignName || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Campaign Year:</label>
+            <input
+              type="text"
+              name="campaignYear"
+              value={character.campaignYear || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Age:</label>
+            <input
+              type="number"
+              name="age"
+              value={character.age || 0}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Gender:</label>
+            <input
+              type="text"
+              name="gender"
+              value={character.gender || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Eye Color:</label>
+            <input
+              type="text"
+              name="eyeColor"
+              value={character.eyeColor || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Weight:</label>
+            <input
+              type="number"
+              name="weight"
+              value={character.weight || 0}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Hair Color:</label>
+            <input
+              type="text"
+              name="hairColor"
+              value={character.hairColor || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Height:</label>
+            <input
+              type="number"
+              name="height"
+              value={character.height || 0}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Star Sign:</label>
+            <input
+              type="text"
+              name="starSign"
+              value={character.starSign || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Siblings:</label>
+            <input
+              type="number"
+              name="siblings"
+              value={character.siblings || 0}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Birthplace:</label>
+            <input
+              type="text"
+              name="birthPlace"
+              value={character.birthPlace || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Special Signs:</label>
+            <input
+              type="text"
+              name="specialSigns"
+              value={character.specialSigns || ""}
+              onChange={handleChange}
+            />
+          </div>
+          <h3>Experience</h3>
+          <div>
+            <label>Current Experience:</label>
+            <input
+              type="number"
+              name="currentExp"
+              value={character.currentExp || 0}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Total Experience:</label>
+            <input
+              type="number"
+              name="totalExp"
+              value={character.totalExp || 0}
+              onChange={handleChange}
+            />
+          </div>
+        </form>
+        {/* Attributes Section */}
+        <h3>Attributes</h3>
         <CharacterAttributes
           attributes={attributes}
           setAttributes={setAttributes}
         />
-
-        {/* Sekcja Umiejętności */}
-        <h3>Umiejętności</h3>
+        {/* Skills Section */}
+        <h3>Skills</h3>
         <CharacterSkills skills={skills} setSkills={setSkills} />
 
-        {/* Sekcja Bronie */}
-        <h3>Bronie</h3>
+        {/* Weapons Section */}
+        <h3>Weapons</h3>
         <CharacterWeapons weapons={weapons} setWeapons={setWeapons} />
 
-        {/* Sekcja Zbroje */}
+        {/* Armor Section */}
         <h3>Armor</h3>
         <CharacterArmor armor={armor} setArmor={setArmor} />
 
-        <h3>Ekwipunek</h3>
+        <h3>Equipment</h3>
         <CharacterItems items={equipment} setItems={setEquipment} />
 
-        <h3>Zdolności</h3>
+        <h3>Talents</h3>
         <CharacterItems items={talents} setItems={setTalents} />
+        <form>
+          {/* Coins Section */}
+          <h3>Coins</h3>
+          <div className="coins-container">
+            <div>
+              <label>Gold Coins:</label>
+              <input
+                type="number"
+                name="gold"
+                value={character.gold || 0}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label>Silver Coins:</label>
+              <input
+                type="number"
+                name="silver"
+                value={character.silver || 0}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label>Bronze Coins:</label>
+              <input
+                type="number"
+                name="bronze"
+                value={character.bronze || 0}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
-        <div>
-          <label>Złote korony:</label>
-          <input
-            type="number"
-            name="gold"
-            value={character.gold || 0}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Srebrne Szylingi:</label>
-          <input
-            type="number"
-            name="silver"
-            value={character.silver || 0}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Miedziaki:</label>
-          <input
-            type="number"
-            name="bronze"
-            value={character.bronze || 0}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Historia:</label>
-          <textarea
-            name="backstory"
-            value={character.backstory || ""}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-        <div>
-          <label>Notatki:</label>
-          <textarea
-            name="notes"
-            value={character.notes || ""}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-        <button type="button" onClick={handleSaveChanges}>
-          {isEditMode ? "Zapisz zmiany" : "Utwórz postać"}
-        </button>
-        {isEditMode && (
-          <button type="button" onClick={handleDelete}>
-            Usuń postać
+          {/* Backstory and Notes */}
+          <div className="backstory-container">
+            <div>
+              <label>Backstory:</label>
+              <textarea
+                name="backstory"
+                value={character.backstory || ""}
+                onChange={handleChange}
+              ></textarea>
+            </div>
+            <div>
+              <label>Notes:</label>
+              <textarea
+                name="notes"
+                value={character.notes || ""}
+                onChange={handleChange}
+              ></textarea>
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <button type="button" onClick={handleSaveChanges}>
+            {isEditMode ? "Save Changes" : "Create Character"}
           </button>
-        )}
-      </form>
-      {message && <p>{message}</p>}
+          {isEditMode && (
+            <button type="button" onClick={handleDelete}>
+              Delete Character
+            </button>
+          )}
+        </form>
+        {message && <p>{message}</p>}
+      </div>
     </div>
   );
 };

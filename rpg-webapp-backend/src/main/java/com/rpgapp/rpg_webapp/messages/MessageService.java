@@ -40,10 +40,8 @@ public class MessageService {
         message.setUser(user);
         message.setMessageTime(LocalDateTime.now());
 
-        // Zapisujemy wiadomość z przypisanym użytkownikiem i czasem
         Message savedMessage = messageRepository.save(message);
 
-        // Rozgłaszanie wiadomości do wszystkich subskrybentów kampanii
         messagingTemplate.convertAndSend("/chatroom/" + message.getCampaign().getCampaignId(), savedMessage);
 
         return savedMessage;

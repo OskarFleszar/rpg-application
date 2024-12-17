@@ -125,28 +125,55 @@ function Profile() {
 
   return (
     <div className="profile-container">
-      <h2>Profil użytkownika</h2>
+      <h2>Your Profile</h2>
       <div className="profile-image">
         {imageUrl ? (
           isEditing ? (
             <>
               <img className="img" src={imageUrl} alt="Profile" />
-              <input type="file" onChange={handleImageChange} />
-              <button onClick={handleImageUpload}>Prześlij zdjęcie</button>
+              <div className="custom-file-upload">
+                <label htmlFor="fileInput" className="file-label">
+                  Choose File
+                </label>
+                <input
+                  id="fileInput"
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={handleImageChange}
+                />
+                <span className="file-status">
+                  {image ? image.name : "No file chosen"}
+                </span>
+              </div>
+              <button onClick={handleImageUpload}>Confirm photo</button>
             </>
           ) : (
             <img className="img" src={imageUrl} alt="Profile" />
           )
         ) : (
           <>
-            <input type="file" onChange={handleImageChange} />
-            <button onClick={handleImageUpload}>Prześlij zdjęcie</button>
+            <div className="custom-file-upload">
+              <label htmlFor="fileInput" className="file-label">
+                Choose File
+              </label>
+              <input
+                id="fileInput"
+                type="file"
+                style={{ display: "none" }}
+                onChange={handleImageChange}
+              />
+              <span className="file-status">
+                {image ? image.name : "No file chosen"}
+              </span>
+            </div>
+
+            <button onClick={handleImageUpload}>Confirm photo</button>
           </>
         )}
       </div>
 
       {isEditing ? (
-        <>
+        <div className="edit-section">
           <div>
             <label>Nickname:</label>
             <input
@@ -163,9 +190,9 @@ function Profile() {
               onChange={(e) => setTempEmail(e.target.value)}
             />
           </div>
-          <button onClick={handleSave}>Zapisz</button>
-          <button onClick={handleCancel}>Anuluj</button>
-        </>
+          <button onClick={handleSave}>Save</button>
+          <button onClick={handleCancel}>Cancel</button>
+        </div>
       ) : (
         <>
           <p>
@@ -174,7 +201,7 @@ function Profile() {
           <p>
             <strong>Email:</strong> {email}
           </p>
-          <button onClick={handleEdit}>Edytuj</button>
+          <button onClick={handleEdit}>Edit</button>
         </>
       )}
     </div>
